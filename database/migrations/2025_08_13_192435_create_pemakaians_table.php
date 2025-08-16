@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('pemakaians', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pelanggan_id')->constrained('pelanggans')->cascadeOnDelete();
-            $table->date('periode');
-            $table->integer('meter_awal');
-            $table->integer('meter_akhir');
-            $table->integer('total_pakai');
+            $table->foreignId('periode_id')->constrained('periodes')->cascadeOnDelete();
+            $table->integer('meter_awal')->default(0);
+            $table->integer('meter_akhir')->default(0);
+            $table->integer('total_pakai')->default(0);
             $table->decimal('tagihan', 12, 2)->nullable();
             $table->timestamps();
         });
+        
     }
 
     /**

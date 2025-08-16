@@ -26,10 +26,21 @@ class PelangganResource extends Resource
 {
     return $form
         ->schema([
-            Forms\Components\Select::make('user_id')
-                ->label('Nama User')
-                ->relationship('user', 'name')
-                ->required(),
+            Forms\Components\TextInput::make('name')
+                ->label('Nama Pelanggan')
+                ->required()
+                ->maxLength(255),
+
+            Forms\Components\TextInput::make('email')
+            ->label('Email')
+            ->email()
+            ->required()
+            ->dehydrated(true)
+            ->unique(
+                table: 'users',
+                column: 'email',
+                ignoreRecord: true
+            ),
 
             Forms\Components\TextInput::make('no_hp')
                 ->label('Nomor HP')
@@ -61,7 +72,7 @@ class PelangganResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')->label('Nama Pelanggan')->searchable(),
-                Tables\Columns\TextColumn::make('no_hp')->label('Nomor HP'),
+                Tables\Columns\TextColumn::make('user.no_hp')->label('Nomor HP'),
                 Tables\Columns\TextColumn::make('user.email')->label('Email'),
                 Tables\Columns\TextColumn::make('tarif.nama_tarif')->label('Tarif'),
             ])

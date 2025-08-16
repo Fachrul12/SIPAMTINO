@@ -15,13 +15,14 @@ class CreatePelanggan extends CreateRecord
     $user = \App\Models\User::create([
         'name' => $data['name'],
         'email' => $data['email'],
+        'no_hp' => $data['no_hp'],
         'password' => bcrypt($data['password']),
         'role_id' => \App\Models\Role::where('name', 'pelanggan')->value('id'),
     ]);
 
     $data['user_id'] = $user->id;
 
-    unset($data['name'], $data['email'], $data['password']);
+    unset($data['name'], $data['email'], $data['no_hp'], $data['password']);
 
     return $data;
 }
