@@ -44,11 +44,13 @@ class PemakaianResource extends Resource
                     ->validationMessages([
                         'unique' => 'Pelanggan untuk periode yang dipilih sudah dibuat.',
                     ])
-                    ->afterStateUpdated(function ($state, callable $set) {
+                    ->afterStateUpdated(function ($state, callable $set, $get) {
                         if ($state) {
+                            // cari pemakaian terakhir pelanggan ini (periode sebelumnya)
                             $lastPemakaian = Pemakaian::where('pelanggan_id', $state)
-                                ->latest('id')
+                                ->orderBy('id', 'desc') // atau orderBy('periode_id', 'desc') kalau periode_id selalu naik
                                 ->first();
+                
                             $set('meter_awal', $lastPemakaian ? $lastPemakaian->meter_akhir : 0);
                         }
                     }),

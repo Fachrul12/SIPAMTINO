@@ -13,6 +13,11 @@ class Periode extends Model
         'status',
     ];
 
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif')->first();
+    }
+
     public function pemakaians()
     {
         return $this->hasMany(Pemakaian::class);
