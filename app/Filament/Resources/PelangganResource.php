@@ -14,6 +14,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 
 class PelangganResource extends Resource
 {
@@ -78,9 +81,26 @@ class PelangganResource extends Resource
             ])
             ->filters([])
             ->actions([
+                Tables\Actions\ViewAction::make(), 
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            ]);
+            ])
+            ->recordUrl(null);           
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {   
+    return $infolist
+        ->schema([
+            TextEntry::make('user.name')->label('Nama'),
+            TextEntry::make('user.email')->label('Email'),
+            TextEntry::make('user.no_hp')->label('Nomor HP'),
+            TextEntry::make('tarif.nama_tarif')->label('Jenis Tarif'),
+
+            ViewEntry::make('qr_code')
+                ->label('QR Code')
+                ->view('filament.qr-code'),
+        ]);
     }
 
     public static function getRelations(): array

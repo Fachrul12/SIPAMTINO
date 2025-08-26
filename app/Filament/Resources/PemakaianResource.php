@@ -13,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Table;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Components\ViewField;
 
 class PemakaianResource extends Resource
 {
@@ -22,81 +24,147 @@ class PemakaianResource extends Resource
     protected static ?string $navigationGroup = 'Laporan';
     protected static ?string $navigationLabel = 'Catat Pemakaian';
 
-    public static function form(Form $form): Form
+    /** =======================
+     *  AUTHORIZATION
+     *  ======================= */
+    public static function canViewAny(): bool
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('pelanggan_id')
-                    ->label('Nama Pelanggan')
-                    ->options(
-                        Pelanggan::with('user')
-                            ->whereHas('user', fn ($q) => $q->where('role_id', 3))
-                            ->get()
-                            ->pluck('user.name', 'id')
-                    )
-                    ->searchable()
-                    ->required()
-                    ->reactive()
-                    ->rules(fn ($get) => [
-                        Rule::unique('pemakaians', 'pelanggan_id')
-                            ->where(fn ($query) => $query->where('periode_id', $get('periode_id')))
-                    ])
-                    ->validationMessages([
-                        'unique' => 'Pelanggan untuk periode yang dipilih sudah dibuat.',
-                    ])
-                    ->afterStateUpdated(function ($state, callable $set, $get) {
-                        if ($state) {
-                            // cari pemakaian terakhir pelanggan ini (periode sebelumnya)
-                            $lastPemakaian = Pemakaian::where('pelanggan_id', $state)
-                                ->orderBy('id', 'desc') // atau orderBy('periode_id', 'desc') kalau periode_id selalu naik
-                                ->first();
-                
-                            $set('meter_awal', $lastPemakaian ? $lastPemakaian->meter_akhir : 0);
-                        }
-                    }),
-
-                Forms\Components\Select::make('periode_id')
-                    ->label('Periode')
-                    ->options(Periode::where('status', 'aktif')->pluck('nama_periode', 'id'))
-                    ->required(),
-
-                Forms\Components\TextInput::make('meter_awal')
-                    ->label('Meter Awal')
-                    ->numeric()
-                    ->disabled(),
-
-                Forms\Components\TextInput::make('meter_akhir')
-                    ->label('Meter Akhir')
-                    ->numeric()
-                    ->required()
-                    ->reactive()
-                    ->afterStateUpdated(function ($state, callable $set, $get) {
-                        $meterAwal = $get('meter_awal') ?? 0;
-                        $total = $state - $meterAwal;
-                        $set('total_pakai', $total);
-
-                        $pelangganId = $get('pelanggan_id');
-                        if ($pelangganId) {
-                            $pelanggan = Pelanggan::with('tarif')->find($pelangganId);
-                            if ($pelanggan && $pelanggan->tarif) {
-                                $biayaPerM3 = $pelanggan->tarif->biaya_per_m3;
-                                $beban = $pelanggan->tarif->beban;
-                                $tagihan = ($total * $biayaPerM3) + $beban;
-                                $set('tagihan', $tagihan);
-                            }
-                        }
-                    }),
-
-                Forms\Components\TextInput::make('total_pakai')
-                    ->label('Jumlah Pemakaian (m³)')
-                    ->disabled(),
-
-                Forms\Components\TextInput::make('tagihan')
-                    ->label('Tagihan (Rp)')
-                    ->disabled(),
-            ]);
+        return Auth::user()->role_id !== 3; // pelanggan tidak bisa akses
     }
 
+    public static function canView($record): bool
+    {
+        return Auth::user()->role_id !== 3;
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::user()->role_id === 2; // hanya petugas
+    }
+
+    public static function canEdit($record): bool
+    {
+        return Auth::user()->role_id === 2;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return Auth::user()->role_id === 2;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return Auth::user()->role_id === 2;
+    }
+
+    /** =======================
+     *  FORM
+     *  ======================= */
+    public static function form(Form $form): Form
+    {
+        return $form->schema([
+            Forms\Components\Grid::make(12)
+                ->schema([
+                    // Kolom kiri (scanner)
+                    Forms\Components\Section::make('Scan QR Code')
+                        ->schema([
+                            ViewField::make('scan_qr')
+                                ->label('')
+                                ->view('filament.forms.components.scan-qr'),
+                        ])
+                        ->columnSpan([
+                            'default' => 12, // full di HP
+                            'md' => 4,      // 4/12 = 30% di desktop
+                        ]),
+
+                    // Kolom kanan (form data)
+                    Forms\Components\Section::make('Data Pemakaian')
+                        ->schema([
+                            Forms\Components\Select::make('pelanggan_id')
+                                ->label('Nama Pelanggan')
+                                ->options(
+                                    Pelanggan::with('user')
+                                        ->whereHas('user', fn ($q) => $q->where('role_id', 3))
+                                        ->get()
+                                        ->pluck('user.name', 'id')
+                                )
+                                ->searchable()
+                                ->required()
+                                ->reactive()
+                                ->rules(fn ($get) => [
+                                    Rule::unique('pemakaians', 'pelanggan_id')
+                                        ->where(fn ($query) => $query->where('periode_id', $get('periode_id')))
+                                ])
+                                ->validationMessages([
+                                    'unique' => 'Pelanggan untuk periode yang dipilih sudah dibuat.',
+                                ])
+                                ->afterStateUpdated(function ($state, callable $set, $get) {
+                                    if ($state) {
+                                        $lastPemakaian = Pemakaian::where('pelanggan_id', $state)
+                                            ->orderByDesc('id')
+                                            ->first();
+
+                                        $set('meter_awal', $lastPemakaian ? $lastPemakaian->meter_akhir : 0);
+                                    }
+                                }),
+
+                            Forms\Components\Grid::make(2)->schema([
+                                Forms\Components\TextInput::make('meter_awal')
+                                    ->label('Meter Awal')
+                                    ->numeric()
+                                    ->disabled(),
+
+                                Forms\Components\TextInput::make('meter_akhir')
+                                    ->label('Meter Akhir')
+                                    ->numeric()
+                                    ->required()
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, callable $set, $get) {
+                                        $meterAwal = $get('meter_awal') ?? 0;
+                                        $total = $state - $meterAwal;
+                                        $set('total_pakai', $total);
+
+                                        $pelangganId = $get('pelanggan_id');
+                                        if ($pelangganId) {
+                                            $pelanggan = Pelanggan::with('tarif')->find($pelangganId);
+                                            if ($pelanggan && $pelanggan->tarif) {
+                                                $biayaPerM3 = $pelanggan->tarif->biaya_per_m3;
+                                                $beban = $pelanggan->tarif->beban;
+                                                $tagihan = ($total * $biayaPerM3) + $beban;
+                                                $set('tagihan', $tagihan);
+                                            }
+                                        }
+                                    }),
+                            ]),
+
+                            Forms\Components\Grid::make(2)->schema([
+                                Forms\Components\Select::make('periode_id')
+                                    ->label('Periode')
+                                    ->options(Periode::where('status', 'aktif')->pluck('nama_periode', 'id'))
+                                    ->default(Periode::where('status', 'aktif')->value('id'))
+                                    ->disabled()
+                                    ->required(),
+
+                                Forms\Components\TextInput::make('total_pakai')
+                                    ->label('Jumlah Pemakaian (m³)')
+                                    ->disabled(),
+                            ]),
+
+                            Forms\Components\TextInput::make('tagihan')
+                                ->label('Tagihan (Rp)')
+                                ->disabled(),
+                        ])
+                        ->columnSpan([
+                            'default' => 12, // full di HP
+                            'md' => 8,      // 8/12 = 70% di desktop
+                        ]),
+                ]),
+        ]);
+    }
+
+    /** =======================
+     *  TABLE
+     *  ======================= */
     public static function table(Table $table): Table
     {
         return $table
@@ -123,7 +191,7 @@ class PemakaianResource extends Resource
 
                 Tables\Columns\TextColumn::make('tagihan')
                     ->label('Tagihan (Rp)')
-                    ->getStateUsing(fn ($record) => 
+                    ->getStateUsing(fn ($record) =>
                         (($record->meter_akhir - $record->meter_awal) * $record->pelanggan->tarif->biaya_per_m3)
                         + $record->pelanggan->tarif->beban
                     )
@@ -137,8 +205,8 @@ class PemakaianResource extends Resource
                     ])
                     ->formatStateUsing(fn ($state) => match ($state) {
                         'belum_bayar' => 'Belum Lunas',
-                        'lunas' => 'Lunas',
-                        default => 'Belum Lunas',
+                        'lunas'       => 'Lunas',
+                        default       => 'Belum Lunas',
                     }),
             ])
             ->filters([
