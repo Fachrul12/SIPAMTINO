@@ -17,6 +17,10 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Facades\Filament;
+use App\Filament\Pages\AdminDashboard;
+use App\Filament\Pages\PetugasDashboard;
+use App\Filament\Pages\PelangganDashboard;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -24,9 +28,9 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')
-            ->path('admin')
-            ->login()
+            ->id('')
+            ->path('')
+            ->login()                    
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -52,7 +56,21 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
+                
                 Authenticate::class,
-            ]);
+            ])
+            ->homeUrl(function () {
+                $user = \Illuminate\Support\Facades\Auth::user(); 
+            
+                $roleId = $user?->role_id;
+            
+                return match ($roleId) {
+                    1 => \App\Filament\Pages\AdminDashboard::getUrl(),
+                    2 => \App\Filament\Pages\PetugasDashboard::getUrl(),
+                    3 => \App\Filament\Pages\PelangganDashboard::getUrl(),
+                    default => \App\Filament\Pages\AdminDashboard::getUrl(), // fallback
+                };
+            });
+            
     }
 }
