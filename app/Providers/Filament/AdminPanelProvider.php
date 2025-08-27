@@ -21,6 +21,20 @@ use Filament\Facades\Filament;
 use App\Filament\Pages\AdminDashboard;
 use App\Filament\Pages\PetugasDashboard;
 use App\Filament\Pages\PelangganDashboard;
+use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable implements FilamentUser
+{
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        // Semua user bisa login, atau bisa dibatasi role
+        return true;
+
+        // Kalau mau role-based:
+        // return in_array($this->role_id, [1, 2, 3]);
+    }
+}
 
 class AdminPanelProvider extends PanelProvider
 {

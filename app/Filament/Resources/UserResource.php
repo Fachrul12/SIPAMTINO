@@ -50,8 +50,10 @@ class UserResource extends Resource
                     ->label('Password')
                     ->password()
                     ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
-                    ->required(fn (string $context) => $context === 'create')
+                    ->required(fn (string $context): bool => $context === 'create')
+                    ->dehydrated(fn ($state) => filled($state)) // penting untuk update
                     ->maxLength(255),
+                
 
                 Forms\Components\Select::make('role_id')
                     ->label('Role')

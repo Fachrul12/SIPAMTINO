@@ -15,6 +15,10 @@ use Filament\Tables\Table;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\ViewField;
+use Filament\Resources\Pages\CreateRecord;
+use Filament\Notifications\Notification;
+
+
 
 class PemakaianResource extends Resource
 {
@@ -22,20 +26,20 @@ class PemakaianResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
     protected static ?string $navigationGroup = 'Laporan';
-    protected static ?string $navigationLabel = 'Catat Pemakaian';
+    protected static ?string $navigationLabel = 'Pemakaian';
 
     /** =======================
      *  AUTHORIZATION
      *  ======================= */
-    public static function canViewAny(): bool
-    {
-        return Auth::user()->role_id !== 3; // pelanggan tidak bisa akses
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()->role_id !== 3; // pelanggan tidak bisa akses
+    // }
 
-    public static function canView($record): bool
-    {
-        return Auth::user()->role_id !== 3;
-    }
+    // public static function canView($record): bool
+    // {
+    //     return Auth::user()->role_id !== 3;
+    // }
 
     public static function canCreate(): bool
     {
@@ -62,6 +66,17 @@ class PemakaianResource extends Resource
      *  ======================= */
     public static function form(Form $form): Form
     {
+        $periodeAktif = Periode::where('status', 'aktif')->first();
+
+        if (! $periodeAktif) {
+            Notification::make()
+                ->title('Belum ada periode aktif saat ini')
+                ->danger()
+                ->send();
+
+            return $form->schema([]); // form kosong
+        }
+
         return $form->schema([
             Forms\Components\Grid::make(12)
                 ->schema([
@@ -234,4 +249,6 @@ class PemakaianResource extends Resource
             'edit'   => Pages\EditPemakaian::route('/{record}/edit'),
         ];
     }
+
+    
 }

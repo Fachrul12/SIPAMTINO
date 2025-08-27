@@ -35,3 +35,6 @@ Route::get('/petugas/dashboard', PetugasDashboard::class)->name('petugas.dashboa
 Route::get('/pelanggan/dashboard', PelangganDashboard::class)->name('pelanggan.dashboard');
 
 // web.php
+
+
+

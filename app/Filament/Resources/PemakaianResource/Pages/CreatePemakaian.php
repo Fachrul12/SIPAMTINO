@@ -4,11 +4,33 @@ namespace App\Filament\Resources\PemakaianResource\Pages;
 
 use App\Filament\Resources\PemakaianResource;
 use Filament\Actions;
+use App\Models\Periode;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Notifications\Notification;
+
+
 
 class CreatePemakaian extends CreateRecord
 {
     protected static string $resource = PemakaianResource::class;
+
+    public function mount(): void
+    {
+        $periodeAktif = Periode::where('status', 'aktif')->first();
+
+        if (! $periodeAktif) {
+            Notification::make()
+                ->title('Belum ada periode aktif saat ini')
+                ->danger()
+                ->send();
+
+            $this->redirect(static::$resource::getUrl('index')); // kembali ke index, tidak ke create
+        }
+
+        parent::mount(); // hanya dijalankan kalau ada periode aktif
+    }
+
+ 
 
     protected function mutateFormDataBeforeCreate(array $data): array
 {

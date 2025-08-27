@@ -12,12 +12,13 @@ class LoginResponse implements LoginResponseContract
         $user = Auth::user();
 
         // Arahkan berdasarkan role
-        if ($user->role === 'admin') {
+        if ($user->role->name === 'admin') {
             return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'petugas') {
+        } elseif ($user->role->name === 'petugas') {
             return redirect()->route('petugas.dashboard');
         } else {
             return redirect()->route('pelanggan.dashboard');
         }
+        
     }
 }

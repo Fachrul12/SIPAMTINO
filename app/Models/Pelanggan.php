@@ -13,6 +13,13 @@ class Pelanggan extends Model
         return $this->belongsTo(User::class);
     }
 
+    protected static function booted()
+    {
+    static::deleting(function ($pelanggan) {
+        $pelanggan->user()->delete();
+    });
+    }
+
     public function tarif()
     {
         return $this->belongsTo(Tarif::class);

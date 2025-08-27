@@ -59,10 +59,9 @@ class PelangganResource extends Resource
             Forms\Components\TextInput::make('password')
                 ->label('Password')
                 ->password()
-                ->dehydrateStateUsing(fn ($state) => !empty($state) ? bcrypt($state) : null)
                 ->required(fn (string $context): bool => $context === 'create')
-                ->dehydrated(fn ($state) => filled($state)) // hanya update kalau diisi
-                ->maxLength(255),
+                ->dehydrated(true), // biar tetap dikirim ke CreatePelanggan
+            
         ]);
 }
 
