@@ -10,7 +10,7 @@ class AdminDashboard extends Page
     protected static ?string $navigationIcon = 'heroicon-o-home';
     protected static ?string $navigationLabel = 'Dashboard';
     protected static ?string $title = 'Dashboard Admin';
-
+    protected static string $routePath = '/admin/dashboard';
     protected static string $view = 'filament.pages.admin-dashboard';
 
     public static function shouldRegisterNavigation(): bool

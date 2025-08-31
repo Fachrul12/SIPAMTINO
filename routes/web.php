@@ -7,6 +7,10 @@ use App\Filament\Pages\AdminDashboard;
 use App\Filament\Pages\PetugasDashboard;
 use App\Filament\Pages\PelangganDashboard;
 
+Route::get('/', function () {
+    return view('landing');
+});
+
 Route::get('w', function () {
     return view('welcome');
 });

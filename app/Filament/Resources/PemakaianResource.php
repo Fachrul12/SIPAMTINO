@@ -106,10 +106,11 @@ class PemakaianResource extends Resource
                                 ->searchable()
                                 ->required()
                                 ->reactive()
-                                ->rules(fn ($get) => [
+                                ->rules([
                                     Rule::unique('pemakaians', 'pelanggan_id')
-                                        ->where(fn ($query) => $query->where('periode_id', $get('periode_id')))
+                                        ->where(fn ($query) => $query->where('periode_id', Periode::where('status', 'aktif')->value('id')))
                                 ])
+                                
                                 ->validationMessages([
                                     'unique' => 'Pelanggan untuk periode yang dipilih sudah dibuat.',
                                 ])
@@ -158,11 +159,13 @@ class PemakaianResource extends Resource
                                     ->options(Periode::where('status', 'aktif')->pluck('nama_periode', 'id'))
                                     ->default(Periode::where('status', 'aktif')->value('id'))
                                     ->disabled()
+                                    ->dehydrated(true)
                                     ->required(),
 
                                 Forms\Components\TextInput::make('total_pakai')
                                     ->label('Jumlah Pemakaian (m³)')
-                                    ->disabled(),
+                                    ->disabled()
+                                    ->dehydrated(true),
                             ]),
 
                             Forms\Components\TextInput::make('tagihan')

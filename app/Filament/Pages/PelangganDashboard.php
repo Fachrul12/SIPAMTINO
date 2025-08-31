@@ -10,7 +10,7 @@ class PelangganDashboard extends Page
     protected static ?string $navigationIcon = 'heroicon-o-user';
     protected static ?string $navigationLabel = 'Dashboard';
     protected static ?string $title = 'Dashboard Pelanggan';
-
+    protected static string $routePath = '/pelanggan/dashboard';
     protected static string $view = 'filament.pages.pelanggan-dashboard';
 
     public static function shouldRegisterNavigation(): bool

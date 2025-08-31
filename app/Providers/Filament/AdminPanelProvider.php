@@ -52,6 +52,9 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                AdminDashboard::class,
+                PetugasDashboard::class,
+                PelangganDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -79,10 +82,10 @@ class AdminPanelProvider extends PanelProvider
                 $roleId = $user?->role_id;
             
                 return match ($roleId) {
-                    1 => \App\Filament\Pages\AdminDashboard::getUrl(),
-                    2 => \App\Filament\Pages\PetugasDashboard::getUrl(),
-                    3 => \App\Filament\Pages\PelangganDashboard::getUrl(),
-                    default => \App\Filament\Pages\AdminDashboard::getUrl(), // fallback
+                    1 => url('/admin/dashboard'),
+                    2 => url('/petugas/dashboard'),
+                    3 => url('/pelanggan/dashboard'),
+                    default => url('/admin/dashboard'), // fallback
                 };
             });
             
