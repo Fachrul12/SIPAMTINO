@@ -6,8 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -65,5 +67,17 @@ public function isPelanggan()
     return $this->role && $this->role->name === 'pelanggan';
 }
 
+    /**
+     * Determine if the user can access the Filament panel.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Allow all users with valid roles to access the panel
+        return $this->role_id && in_array($this->role_id, [1, 2, 3]);
+        
+        // Role 1: Admin
+        // Role 2: Petugas
+        // Role 3: Pelanggan
+    }
 
 }

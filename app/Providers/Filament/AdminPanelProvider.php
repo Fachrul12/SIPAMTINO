@@ -23,18 +23,8 @@ use App\Filament\Pages\PetugasDashboard;
 use App\Filament\Pages\PelangganDashboard;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class User extends Authenticatable implements FilamentUser
-{
-    public function canAccessPanel(\Filament\Panel $panel): bool
-    {
-        // Semua user bisa login, atau bisa dibatasi role
-        return true;
-
-        // Kalau mau role-based:
-        // return in_array($this->role_id, [1, 2, 3]);
-    }
-}
+use Filament\Pages\Auth\Login;
+use App\Filament\Pages\Auth\CustomLogin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -42,12 +32,14 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('')
-            ->path('')
-            ->login()                    
+            ->id('admin')
+            ->path('admin')
+            ->login(CustomLogin::class)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Purple,
             ])
+            ->brandName('SIPAMTINO')
+            ->favicon(asset('favicon.ico'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -56,7 +48,6 @@ class AdminPanelProvider extends PanelProvider
                 PetugasDashboard::class,
                 PelangganDashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,

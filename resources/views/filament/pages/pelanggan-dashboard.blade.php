@@ -36,7 +36,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         
         {{-- Total Users Card --}}
-        <div class="group relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-800/20 rounded-2xl border border-blue-200 dark:border-blue-700 p-6 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:-translate-y-1">
+        <div class="shadow-xl group relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-800/20 rounded-2xl border border-blue-200 dark:border-blue-700 p-6 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:-translate-y-1">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="bg-blue-500 rounded-lg p-2 w-fit mb-3">
@@ -51,7 +51,7 @@
         </div>
         
         {{-- Pemakaian Air Pelanggan --}}
-        <div class="group relative overflow-hidden bg-gradient-to-br from-cyan-50 to-blue-100 dark:from-cyan-900/20 dark:to-blue-800/20 rounded-2xl border border-cyan-200 dark:border-cyan-700 p-6 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:-translate-y-1">
+        <div class="shadow-xl group relative overflow-hidden bg-gradient-to-br from-cyan-50 to-blue-100 dark:from-cyan-900/20 dark:to-blue-800/20 rounded-2xl border border-cyan-200 dark:border-cyan-700 p-6 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:-translate-y-1">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="bg-cyan-500 rounded-lg p-2 w-fit mb-3">
@@ -66,7 +66,7 @@
         </div>
 
         {{-- Total Tagihan Belum Dibayar --}}
-        <div class="group relative overflow-hidden bg-gradient-to-br {{ $totalTagihanBelumBayar > 0 ? 'from-red-50 to-pink-100 dark:from-red-900/20 dark:to-pink-800/20 border-red-200 dark:border-red-700' : 'from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-800/20 border-green-200 dark:border-green-700' }} rounded-2xl border p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+        <div class="shadow-xl group relative overflow-hidden bg-gradient-to-br {{ $totalTagihanBelumBayar > 0 ? 'from-red-50 to-pink-100 dark:from-red-900/20 dark:to-pink-800/20 border-red-200 dark:border-red-700' : 'from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-800/20 border-green-200 dark:border-green-700' }} rounded-2xl border p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="{{ $totalTagihanBelumBayar > 0 ? 'bg-red-500' : 'bg-green-500' }} rounded-lg p-2 w-fit mb-3">
@@ -87,7 +87,7 @@
         </div>
         
         {{-- Total Pengaduan --}}
-        <div class="group relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/20 dark:to-orange-800/20 rounded-2xl border border-amber-200 dark:border-amber-700 p-6 hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300 hover:-translate-y-1">
+        <div class="shadow-xl group relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/20 dark:to-orange-800/20 rounded-2xl border border-amber-200 dark:border-amber-700 p-6 hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300 hover:-translate-y-1">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="bg-amber-500 rounded-lg p-2 w-fit mb-3">

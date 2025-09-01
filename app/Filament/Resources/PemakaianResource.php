@@ -230,7 +230,7 @@ class PemakaianResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('periode_id')
                     ->label('Filter Periode')
-                    ->relationship('periode', 'nama_periode')
+                    ->options(Periode::pluck('nama_periode', 'id'))
                     ->searchable()
                     ->preload(),
             ])
