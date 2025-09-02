@@ -88,8 +88,8 @@ class PemakaianResource extends Resource
                                 ->view('filament.forms.components.scan-qr'),
                         ])
                         ->columnSpan([
-                            'default' => 12, // full di HP
-                            'md' => 4,      // 4/12 = 30% di desktop
+                            'default' => 12,
+                            'md' => 4,    
                         ]),
 
                     // Kolom kanan (form data)

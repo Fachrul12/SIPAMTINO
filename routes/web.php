@@ -38,6 +38,11 @@ Route::get('/dashboard', AdminDashboard::class)->name('admin.dashboard');
 Route::get('/petugas/dashboard', PetugasDashboard::class)->name('petugas.dashboard');
 Route::get('/pelanggan/dashboard', PelangganDashboard::class)->name('pelanggan.dashboard');
 
+// Demo Progress Meter
+Route::get('/demo/progress-meter', function () {
+    return view('progress-meter-demo');
+})->name('demo.progress-meter');
+
 // web.php
 
 

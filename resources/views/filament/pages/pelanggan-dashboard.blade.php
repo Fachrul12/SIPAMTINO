@@ -1,4 +1,8 @@
 <x-filament-panels::page>
+    {{-- Load Custom CSS for Menu Styling --}}
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('css/simple-menu-style.css') }}">
+    @endpush
     @php
         $user = auth()->user();
         $pelanggan = $user->pelanggan;

@@ -1,4 +1,14 @@
 <x-filament-panels::page>
+    {{-- Load Custom CSS for Menu Styling and Progress Meter --}}
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('css/simple-menu-style.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/progress-meter.css') }}">
+    @endpush
+    
+    {{-- Load Progress Meter JavaScript --}}
+    @push('scripts')
+        <script src="{{ asset('js/progress-meter.js') }}"></script>
+    @endpush
     {{-- Header Section --}}
     <div class="mb-8">
         <div class="flex items-center justify-between">
@@ -94,7 +104,7 @@
     {{-- Progress Section --}}
     <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {{-- Progress Card --}}
+        {{-- Progress Meter Card (Enhanced) --}}
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                 <svg class="w-5 h-5 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -105,27 +115,67 @@
             
             @php
                 $persentaseSelesai = $totalPelanggan > 0 ? round(($pelangganSudahDicatat / $totalPelanggan) * 100) : 0;
+                
+                // Determine status emoji and color
+                $statusEmoji = $persentaseSelesai >= 100 ? '✅' : ($persentaseSelesai >= 75 ? '🔵' : ($persentaseSelesai >= 50 ? '🟡' : '🔴'));
+                $statusColor = $persentaseSelesai >= 100 ? 'text-green-600' : ($persentaseSelesai >= 75 ? 'text-blue-600' : ($persentaseSelesai >= 50 ? 'text-yellow-600' : 'text-red-600'));
+                $statusText = $persentaseSelesai >= 100 ? 'Selesai' : ($persentaseSelesai >= 75 ? 'Hampir Selesai' : ($persentaseSelesai >= 50 ? 'Sedang Progress' : 'Perlu Perhatian'));
             @endphp
             
-            <div class="mb-4">
-                <div class="flex justify-between mb-2">
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Pencatatan Periode Ini</span>
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $persentaseSelesai }}%</span>
-                </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                    <div class="bg-gradient-to-r from-green-400 to-emerald-500 h-3 rounded-full transition-all duration-500" style="width: {{ $persentaseSelesai }}%"></div>
+            {{-- Progress Header with Emoji and Percentage --}}
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Pencatatan Periode Ini</span>
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">{{ $statusEmoji }}</span>
+                    <span class="text-xl font-bold {{ $statusColor }} dark:{{ $statusColor }}">{{ $persentaseSelesai }}%</span>
                 </div>
             </div>
             
+            {{-- Enhanced Progress Bar with Loading Effect --}}
+            <div id="progress-container" class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-6 mb-4 relative overflow-hidden shadow-inner">
+                <div id="progress-bar" 
+                     class="h-6 rounded-full transition-all duration-1500 ease-out relative overflow-hidden" 
+                     style="width: 0%;"
+                     data-target="{{ $persentaseSelesai }}">
+                    
+                    {{-- Loading Text --}}
+                    <div id="loading-text" class="absolute inset-0 flex items-center justify-center text-white text-sm font-semibold text-shadow opacity-0">
+                        Memuat...
+                    </div>
+                    
+                    {{-- Percentage Text --}}
+                    <div id="percentage-text" class="absolute inset-0 flex items-center justify-center text-white text-sm font-semibold text-shadow opacity-0">
+                        {{ $persentaseSelesai }}%
+                    </div>
+                </div>
+            </div>
+            
+            {{-- Status Info --}}
+            <div class="text-center mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $statusColor }} bg-opacity-10">
+                    <span class="mr-2">{{ $statusEmoji }}</span>
+                    {{ $statusText }}
+                </span>
+            </div>
+            
+            {{-- Progress Details --}}
             <div class="grid grid-cols-2 gap-4 mt-4">
-                <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $pelangganSudahDicatat }}</p>
+                <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:shadow-md transition-shadow">
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ number_format($pelangganSudahDicatat, 0, ',', '.') }}</p>
                     <p class="text-sm text-green-700 dark:text-green-300">Selesai</p>
                 </div>
-                <div class="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                    <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ $pelangganBelumDicatat }}</p>
+                <div class="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:shadow-md transition-shadow">
+                    <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ number_format($pelangganBelumDicatat, 0, ',', '.') }}</p>
                     <p class="text-sm text-orange-700 dark:text-orange-300">Tersisa</p>
                 </div>
+            </div>
+            
+            {{-- Total Info --}}
+            <div class="mt-3 text-center text-sm text-gray-600 dark:text-gray-400">
+                <strong>{{ number_format($pelangganSudahDicatat, 0, ',', '.') }}</strong> dari 
+                <strong>{{ number_format($totalPelanggan, 0, ',', '.') }}</strong> pelanggan
+                <br>
+                <strong>Periode:</strong> {{ $periodeAktif?->nama_periode ?? 'Tidak ada periode aktif' }}
             </div>
         </div>
 
@@ -233,4 +283,143 @@
         </div>
         
     </div>
+    
+    {{-- JavaScript untuk Progress Loading --}}
+    @push('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add keyframes for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes loadingPulse {
+                0%, 100% { background: linear-gradient(90deg, #d1fae5, #a7f3d0, #d1fae5) !important; }
+                50% { background: linear-gradient(90deg, #a7f3d0, #d1fae5, #a7f3d0) !important; }
+            }
+            @keyframes waveLoading {
+                0% { background-position: 200% 0; }
+                100% { background-position: -200% 0; }
+            }
+            @keyframes loadingStripes {
+                0% { background-position: 0 0; }
+                100% { background-position: 24px 0; }
+            }
+            .text-shadow {
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Wait a bit for DOM to be fully ready
+        setTimeout(() => {
+            const progressBar = document.getElementById('progress-bar');
+            const progressContainer = document.getElementById('progress-container');
+            const loadingText = document.getElementById('loading-text');
+            const percentageText = document.getElementById('percentage-text');
+            
+            if (progressBar) {
+                const targetPercentage = parseInt(progressBar.dataset.target) || 0;
+                
+                // Initial setup
+                progressBar.style.width = '0%';
+                
+                // Determine final color based on percentage
+                let finalBgColor;
+                if (targetPercentage >= 100) {
+                    finalBgColor = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                } else if (targetPercentage >= 75) {
+                    finalBgColor = 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)';
+                } else if (targetPercentage >= 50) {
+                    finalBgColor = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+                } else {
+                    finalBgColor = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+                }
+                
+                // Start loading phase (always green)
+                setTimeout(() => {
+                    // Show loading text
+                    if (loadingText) {
+                        loadingText.style.opacity = '1';
+                        loadingText.style.animation = 'pulse 1s ease-in-out infinite';
+                    }
+                    
+                    // Green loading background for container
+                    if (progressContainer) {
+                        progressContainer.style.background = '#d1fae5';
+                        progressContainer.style.animation = 'loadingPulse 1s ease-in-out infinite';
+                        progressContainer.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 0 15px rgba(16, 185, 129, 0.4)';
+                    }
+                    
+                    // Green loading progress bar
+                    progressBar.style.background = 'linear-gradient(135deg, #10b981 0%, #34d399 50%, #059669 100%)';
+                    progressBar.style.backgroundSize = '200% 100%';
+                    progressBar.style.animation = 'waveLoading 1s linear infinite';
+                    progressBar.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
+                    
+                    // Add stripes overlay
+                    const stripesDiv = document.createElement('div');
+                    stripesDiv.id = 'stripes-overlay';
+                    stripesDiv.style.cssText = `
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: repeating-linear-gradient(
+                            45deg,
+                            transparent,
+                            transparent 6px,
+                            rgba(255, 255, 255, 0.3) 6px,
+                            rgba(255, 255, 255, 0.3) 12px
+                        );
+                        animation: loadingStripes 0.8s linear infinite;
+                        pointer-events: none;
+                    `;
+                    progressBar.appendChild(stripesDiv);
+                    
+                    // Start progress animation
+                    progressBar.style.width = targetPercentage + '%';
+                }, 300);
+                
+                // Complete loading phase
+                setTimeout(() => {
+                    // Hide loading text
+                    if (loadingText) {
+                        loadingText.style.opacity = '0';
+                        loadingText.style.animation = '';
+                    }
+                    
+                    // Reset container to normal
+                    if (progressContainer) {
+                        progressContainer.style.background = '';
+                        progressContainer.style.animation = '';
+                        progressContainer.style.boxShadow = '';
+                    }
+                    
+                    // Change to final color
+                    progressBar.style.background = finalBgColor;
+                    progressBar.style.backgroundSize = '';
+                    progressBar.style.animation = '';
+                    progressBar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+                    
+                    // Remove stripes overlay
+                    const stripesOverlay = document.getElementById('stripes-overlay');
+                    if (stripesOverlay) {
+                        stripesOverlay.remove();
+                    }
+                    
+                    // Show percentage text if > 15%
+                    if (targetPercentage > 15 && percentageText) {
+                        percentageText.style.opacity = '1';
+                    }
+                    
+                    // Ensure progress bar stays visible
+                    progressBar.style.display = 'block';
+                    progressBar.style.visibility = 'visible';
+                }, 2200);
+            }
+        }, 200);
+    });
+    </script>
+    @endpush
+    
 </x-filament-panels::page>
