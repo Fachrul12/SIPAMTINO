@@ -19,7 +19,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         
         {{-- Total Users Card --}}
-        <div class="group relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-800/20 rounded-2xl border border-blue-200 dark:border-blue-700 p-6 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:-translate-y-1">
+        <div class="shadow-xl group relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-800/20 rounded-2xl border border-blue-200 dark:border-blue-700 p-6 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:-translate-y-1">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="bg-blue-500 rounded-lg p-2 w-fit mb-3">
@@ -34,7 +34,7 @@
         </div>
         
         {{-- Total Pelanggan Aktif Card --}}
-        <div class="group relative overflow-hidden bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-900/20 dark:to-green-800/20 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6 hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 hover:-translate-y-1">
+        <div class="shadow-xl group relative overflow-hidden bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-900/20 dark:to-green-800/20 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6 hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 hover:-translate-y-1">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="bg-emerald-500 rounded-lg p-2 w-fit mb-3">
@@ -49,7 +49,7 @@
         </div>
 
         {{-- Sudah Dicatat Card --}}
-        <div class="group relative overflow-hidden bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-800/20 rounded-2xl border border-green-200 dark:border-green-700 p-6 hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 hover:-translate-y-1">
+        <div class="shadow-xl group relative overflow-hidden bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-800/20 rounded-2xl border border-green-200 dark:border-green-700 p-6 hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 hover:-translate-y-1">
             @php
                 $periodeAktif = \App\Models\Periode::where('status', 'aktif')->first();
                 $pelangganSudahDicatat = $periodeAktif ? 
@@ -71,7 +71,7 @@
         </div>
         
         {{-- Belum Dicatat Card --}}
-        <div class="group relative overflow-hidden bg-gradient-to-br from-orange-50 to-red-100 dark:from-orange-900/20 dark:to-red-800/20 rounded-2xl border border-orange-200 dark:border-orange-700 p-6 hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 hover:-translate-y-1">
+        <div class="shadow-xl group relative overflow-hidden bg-gradient-to-br from-orange-50 to-red-100 dark:from-orange-900/20 dark:to-red-800/20 rounded-2xl border border-orange-200 dark:border-orange-700 p-6 hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 hover:-translate-y-1">
             @php
                 $totalPelanggan = \App\Models\Pelanggan::count();
                 $pelangganBelumDicatat = $totalPelanggan - $pelangganSudahDicatat;
