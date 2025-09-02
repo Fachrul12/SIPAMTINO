@@ -24,6 +24,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Filament\Pages\Auth\Login;
 use App\Filament\Pages\Auth\CustomLogin;
+use Filament\Support\Facades\FilamentView;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -35,10 +36,14 @@ class AdminPanelProvider extends PanelProvider
             ->path('')
             ->login(CustomLogin::class)
             ->colors([
-                'primary' => Color::Purple,
+                'primary' => Color::Blue,
             ])
             ->brandName('SIPAMTINO')
             ->favicon(asset('favicon.ico'))
+            ->renderHook(
+                'panels::head.end',
+                fn (): string => '<link rel="stylesheet" href="' . asset('css/simple-menu-style.css') . '">'
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
