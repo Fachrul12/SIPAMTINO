@@ -13,7 +13,7 @@ class LoginResponse implements LoginResponseContract
 
         // Arahkan berdasarkan role
         if ($user->role->name === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('filament.admin.pages.admin-dashboard');
         } elseif ($user->role->name === 'petugas') {
             return redirect()->route('petugas.dashboard');
         } else {

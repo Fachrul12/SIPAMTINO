@@ -64,7 +64,7 @@
                 </div>
                 
                 <div class="flex items-center space-x-4">
-                    <a href="/admin/login" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-medium">
+                    <a href="/login" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-medium">
                         Masuk Sistem
                     </a>
                 </div>
@@ -97,7 +97,7 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 mb-8">
-                <a href="/admin/login" class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 text-center">
+                <a href="/login" class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 text-center">
                             Mulai Sekarang
                         </a>
                         <a href="#fitur" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300 text-center">
@@ -442,7 +442,7 @@
             </p>
             
             <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                <a href="/admin/login" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-10 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                <a href="/login" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-10 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
                     Akses Sistem
                 </a>
                 <div class="flex items-center space-x-2 text-gray-500">
@@ -590,9 +590,9 @@
                     <div>
                         <h4 class="text-lg font-semibold text-white mb-4">Sistem</h4>
                         <ul class="space-y-3 text-gray-400">
-                            <li><a href="/admin" class="hover:text-white transition-colors duration-200">Dashboard Admin</a></li>
-                            <li><a href="/admin" class="hover:text-white transition-colors duration-200">Dashboard Petugas</a></li>
-                            <li><a href="/admin" class="hover:text-white transition-colors duration-200">Dashboard Pelanggan</a></li>
+                            <li><a href="/" class="hover:text-white transition-colors duratiaon-200">Dashboard Admin</a></li>
+                            <li><a href="/" class="hover:text-white transition-colors duration-200">Dashboard Petugas</a></li>
+                            <li><a href="/" class="hover:text-white transition-colors duration-200">Dashboard Pelanggan</a></li>
                             <li><a href="#" class="hover:text-white transition-colors duration-200">Dokumentasi</a></li>
                         </ul>
                     </div>

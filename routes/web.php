@@ -34,7 +34,7 @@ Route::get('/qr-download/{id}', function ($id) {
 })->name('qr.download');
 
 // Dashboard Routes
-Route::get('/admin/dashboard', AdminDashboard::class)->name('admin.dashboard');
+Route::get('/dashboard', AdminDashboard::class)->name('admin.dashboard');
 Route::get('/petugas/dashboard', PetugasDashboard::class)->name('petugas.dashboard');
 Route::get('/pelanggan/dashboard', PelangganDashboard::class)->name('pelanggan.dashboard');
 
