@@ -13,6 +13,7 @@ use Filament\Actions\Action;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 
 class Laporan extends Page implements Tables\Contracts\HasTable, Forms\Contracts\HasForms
 {
@@ -22,6 +23,11 @@ class Laporan extends Page implements Tables\Contracts\HasTable, Forms\Contracts
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $title = 'Laporan Penggunaan (Per Periode)';
     protected static string $view = 'filament.pages.laporan';
+
+    public static function canAccess(): bool
+    {
+        return Auth::user()->role_id === 1;
+    }
 
     /**
      * State form (periode_awal & periode_akhir) disimpan di sini.

@@ -14,16 +14,20 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-
     protected static ?string $navigationLabel = 'Kelola User';
-
     protected static ?string $navigationGroup = 'Manajemen User';
+
+    public static function canAccess(): bool
+    {
+        return Auth::user()->role_id === 1;
+    }
+
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
 {

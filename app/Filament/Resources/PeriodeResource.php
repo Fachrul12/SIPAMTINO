@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class PeriodeResource extends Resource
 {
@@ -19,6 +20,11 @@ class PeriodeResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
     protected static ?string $navigationLabel = 'Periode';
     protected static ?string $navigationGroup = 'Manajemen Data';
+    
+    public static function canAccess(): bool
+    {
+        return Auth::user()->role_id === 1;
+    }
 
     public static function form(Form $form): Form
     {

@@ -154,29 +154,30 @@ class PemakaianResource extends Resource
                             ]),
 
                             Forms\Components\Grid::make(2)->schema([
-                                Forms\Components\Select::make('periode_id')
-                                    ->label('Periode')
-                                    ->options(Periode::where('status', 'aktif')->pluck('nama_periode', 'id'))
-                                    ->default(Periode::where('status', 'aktif')->value('id'))
-                                    ->disabled()
-                                    ->dehydrated(true)
-                                    ->required(),
-
-                                Forms\Components\TextInput::make('total_pakai')
-                                    ->label('Jumlah Pemakaian (m³)')
-                                    ->disabled()
-                                    ->dehydrated(true),
+                            Forms\Components\Select::make('periode_id')
+                                ->label('Periode')
+                                ->options(Periode::where('status', 'aktif')->pluck('nama_periode', 'id'))
+                                ->default(Periode::where('status', 'aktif')->value('id'))
+                                ->disabled()
+                                ->dehydrated(true)
+                                ->required(),
+                            
+                            
+                            Forms\Components\TextInput::make('total_pakai')
+                                ->label('Jumlah Pemakaian (m³)')
+                                ->disabled()
+                                ->dehydrated(true),
                             ]),
 
                             Forms\Components\TextInput::make('tagihan')
                                 ->label('Tagihan (Rp)')
                                 ->disabled(),
-                        ])
-                        ->columnSpan([
-                            'default' => 12, // full di HP
-                            'md' => 8,      // 8/12 = 70% di desktop
-                        ]),
-                ]),
+                            ])
+                            ->columnSpan([
+                                'default' => 12, 
+                                'md' => 8,      
+                            ]),
+            ]),
         ]);
     }
 
@@ -194,6 +195,7 @@ class PemakaianResource extends Resource
 
                 Tables\Columns\TextColumn::make('periode.nama_periode')
                     ->label('Periode')
+                    ->disabled()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('meter_awal')
@@ -236,6 +238,8 @@ class PemakaianResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+
             ]);
     }
 

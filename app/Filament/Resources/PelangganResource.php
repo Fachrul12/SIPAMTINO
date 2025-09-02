@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
+use Illuminate\Support\Facades\Auth;
 
 class PelangganResource extends Resource
 {
@@ -24,6 +25,11 @@ class PelangganResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user';
     protected static ?string $navigationLabel = 'Kelola Pelanggan';
     protected static ?string $navigationGroup = 'Manajemen User';
+
+    public static function canAccess(): bool
+    {
+        return Auth::user()->role_id === 1;
+    }
 
     public static function form(Form $form): Form
 {

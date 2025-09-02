@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class TarifResource extends Resource
 {
@@ -19,6 +20,11 @@ class TarifResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
     protected static ?string $navigationLabel = 'Kelola Tarif';
     protected static ?string $navigationGroup = 'Manajemen Data';
+
+    public static function canAccess(): bool
+    {
+        return Auth::user()->role_id === 1;
+    }
 
     public static function form(Form $form): Form
     {

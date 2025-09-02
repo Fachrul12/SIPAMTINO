@@ -17,6 +17,7 @@ class PengaduanResource extends Resource
     protected static ?string $model = Pengaduan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+    protected static ?string $navigationGroup = 'Laporan';
     protected static ?string $navigationLabel = 'Pengaduan';
 
     public static function canCreate(): bool
