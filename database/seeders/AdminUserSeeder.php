@@ -21,5 +21,38 @@ class AdminUserSeeder extends Seeder
                 'role_id' => $adminRole->id,
             ]
         );
+
+        $PetugasRole = Role::where('name', 'petugas')->first();
+
+        User::firstOrCreate(
+            ['email' => 'petugas@gmail.com'], // Ganti sesuai kebutuhan
+            [
+                'name' => 'Petugas',
+                'password' => Hash::make('1234'), // Ganti password
+                'role_id' => $PetugasRole->id,
+            ]
+        );
+
+        $PelangganRole = Role::where('name', 'pelanggan')->first();
+
+        User::firstOrCreate(
+            ['email' => 'yoga@gmail.com'], // Ganti sesuai kebutuhan
+            [
+                'name' => 'Yoga',
+                'password' => Hash::make('1234'), // Ganti password
+                'role_id' => $PelangganRole->id,
+            ]
+        );
+
+        $PelangganRole = Role::where('name', 'pelanggan')->first();
+
+        User::firstOrCreate(
+            ['email' => 'rehan@gmail.com'], // Ganti sesuai kebutuhan
+            [
+                'name' => 'Rehan',
+                'password' => Hash::make('1234'), // Ganti password
+                'role_id' => $PelangganRole->id,
+            ]
+        );
     }
 }
