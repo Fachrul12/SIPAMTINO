@@ -1,6 +1,6 @@
 <x-filament-panels::page.simple>
     <!-- Modern split-screen design -->
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 lg:grid lg:grid-cols-2">
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-800 lg:grid lg:grid-cols-2">
         
         <!-- Left side - Brand/Visual Section -->
         {{-- <div class="hidden lg:flex lg:flex-col lg:justify-center lg:items-center bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-700 relative overflow-hidden">

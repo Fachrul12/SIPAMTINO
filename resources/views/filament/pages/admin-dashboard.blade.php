@@ -2,8 +2,7 @@
     {{-- Header Section --}}
     <div class="mb-8">
         <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard Admin</h1>
+            <div>                
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Selamat datang di sistem monitoring air, Admin!</p>
             </div>
             <div class="hidden md:flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg">

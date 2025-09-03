@@ -13,7 +13,6 @@
     <div class="mb-8">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard Petugas</h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Monitor dan catat pemakaian air pelanggan</p>
             </div>
             <div class="hidden md:flex items-center space-x-2 bg-gradient-to-r from-green-500 to-teal-600 text-white px-4 py-2 rounded-lg">
