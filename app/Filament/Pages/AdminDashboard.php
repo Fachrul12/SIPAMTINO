@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\WidgetResource\Widgets\TurbidityChart;
 
 class AdminDashboard extends Page
 {
@@ -16,5 +17,12 @@ class AdminDashboard extends Page
     public static function shouldRegisterNavigation(): bool
     {
         return Auth::user()?->role_id === 1;
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            TurbidityChart::class,
+        ];
     }
 }

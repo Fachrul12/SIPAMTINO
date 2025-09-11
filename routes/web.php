@@ -3,13 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\User;
+use App\Models\Turbidity;
 use App\Filament\Pages\AdminDashboard;
 use App\Filament\Pages\PetugasDashboard;
 use App\Filament\Pages\PelangganDashboard;
 
+
 Route::get('/', function () {
-    return view('landing');
-})->name('landing');
+    $latest = Turbidity::latest('recorded_at')->first();
+    return view('landing', compact('latest'));
+});
+
+// API Route for getting latest turbidity data
 
 Route::get('w', function () {
     return view('welcome');

@@ -36,6 +36,35 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
         }
+        /* Bubble Animation untuk Water Tank */
+        .bubble {
+            position: absolute;
+            bottom: 0;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: bubble-rise 4s infinite ease-in-out;
+        }
+        @keyframes bubble-rise {
+            0% {
+                bottom: 0;
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            10% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+            95% {
+                opacity: 0.7;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+                transform: scale(0.3);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -72,12 +101,15 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    
+
+    <!-- Hero Section dengan Monitoring Kekeruhan Air -->
     <section id="beranda" class="pt-16 gradient-bg min-h-screen flex items-center relative overflow-hidden">
         <!-- Background Pattern -->
         <div class="absolute inset-0 opacity-10">
             <div class="absolute top-0 left-0 w-72 h-72 bg-white rounded-full mix-blend-multiply filter blur-xl"></div>
             <div class="absolute bottom-0 right-0 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl"></div>
+            <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-200 rounded-full mix-blend-multiply filter blur-2xl"></div>
         </div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -93,11 +125,112 @@
                     </h1>
                     <p class="text-xl text-blue-100 mb-8 leading-relaxed">
                         SIPAMTINO adalah solusi digital terdepan untuk pengelolaan distribusi air bersih. 
-                        Monitoring real-time, pembayaran mudah, dan layanan pelanggan yang responsif.
+                        Dilengkapi monitoring kekeruhan air real-time, pembayaran mudah, dan layanan pelanggan yang responsif.
                     </p>
                     
+                    <!-- Live Monitoring Kekeruhan Air -->
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-8 border border-white/20" data-aos="fade-up" data-aos-delay="300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-cyan-200 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.5 2a.5.5 0 00-.5.5v15a.5.5 0 00.5.5h9a.5.5 0 00.5-.5v-15a.5.5 0 00-.5-.5h-9zM3 2.5A2.5 2.5 0 015.5 0h9A2.5 2.5 0 0117 2.5v15a2.5 2.5 0 01-2.5 2.5h-9A2.5 2.5 0 013 17.5v-15zM6.5 5a1 1 0 011-1h5a1 1 0 110 2h-5a1 1 0 01-1-1zm0 3a1 1 0 011-1h5a1 1 0 110 2h-5a1 1 0 01-1-1zm0 3a1 1 0 011-1h5a1 1 0 110 2h-5a1 1 0 01-1-1zm0 3a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                Monitoring Kekeruhan Air Real-Time
+                            </h3>
+                            <span class="px-3 py-1 bg-green-400/20 text-green-300 rounded-full text-xs font-medium animate-pulse">
+                                ● LIVE
+                            </span>
+                        </div>
+                        
+                        @if($latest)
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <!-- Nilai Kekeruhan -->
+                                <div class="bg-white/10 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-blue-200 text-sm">Kekeruhan</span>
+                                        <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M3.5 2a.5.5 0 00-.5.5v15a.5.5 0 001 0V17h12v.5a.5.5 0 001 0v-15a.5.5 0 00-.5-.5h-13zM5 4h10v11H5V4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div id="turbidity-value" class="text-3xl font-bold text-white">{{ $latest->turbidity }}</div>
+                                    <div class="text-xs text-blue-200 mt-1">NTU</div>
+                                </div>
+                                
+                                <!-- Status Kualitas -->
+                                <div class="bg-white/10 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-blue-200 text-sm">Status</span>
+                                        <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="text-xl font-bold">
+                                        @if($latest->turbidity <= 5)
+                                            <span id="status-text" class="text-green-400">Sangat Baik</span>
+                                        @elseif($latest->turbidity <= 25)
+                                            <span id="status-text" class="text-yellow-400">Baik</span>
+                                        @elseif($latest->turbidity <= 50)
+                                            <span id="status-text" class="text-orange-400">Sedang</span>
+                                        @else
+                                            <span id="status-text" class="text-red-400">Perlu Perhatian</span>
+                                        @endif
+                                    </div>
+                                    <div id="status-description" class="text-xs text-blue-200 mt-1">
+                                        @if($latest->turbidity <= 5)
+                                            Aman dikonsumsi
+                                        @elseif($latest->turbidity <= 25)
+                                            Layak konsumsi
+                                        @elseif($latest->turbidity <= 50)
+                                            Perlu penyaringan
+                                        @else
+                                            Perlu treatment
+                                        @endif
+                                    </div>
+                                </div>
+                                
+                                <!-- Waktu Update -->
+                                <div class="bg-white/10 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-blue-200 text-sm">Update</span>
+                                        <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div id="update-time" class="text-lg font-bold text-white">{{ $latest->recorded_at->format('H:i') }}</div>
+                                    <div id="update-date" class="text-xs text-blue-200 mt-1">{{ $latest->recorded_at->format('d M Y') }}</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Progress Bar Kualitas Air -->
+                            <div class="mt-4">
+                                <div class="flex justify-between text-xs text-blue-200 mb-2">
+                                    <span>Kualitas Air</span>
+                                    <span id="quality-percentage">{{ min(100, max(0, 100 - ($latest->turbidity * 2))) }}%</span>
+                                </div>
+                                <div class="w-full bg-white/20 rounded-full h-2 overflow-hidden">
+                                    <div id="quality-progress" class="h-full rounded-full transition-all duration-1000 
+                                        @if($latest->turbidity <= 5) bg-gradient-to-r from-green-400 to-emerald-400
+                                        @elseif($latest->turbidity <= 25) bg-gradient-to-r from-yellow-400 to-amber-400
+                                        @elseif($latest->turbidity <= 50) bg-gradient-to-r from-orange-400 to-orange-500
+                                        @else bg-gradient-to-r from-red-400 to-red-500
+                                        @endif"
+                                        style="width: {{ min(100, max(0, 100 - ($latest->turbidity * 2))) }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <svg class="w-16 h-16 text-blue-300/50 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <p class="text-blue-200">Sistem monitoring sedang melakukan kalibrasi</p>
+                                <p class="text-blue-300/60 text-sm mt-2">Data akan tersedia dalam beberapa saat</p>
+                            </div>
+                        @endif
+                    </div>
+                    
                     <div class="flex flex-col sm:flex-row gap-4 mb-8">
-                <a href="/login" class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 text-center">
+                        <a href="/login" class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 text-center">
                             Mulai Sekarang
                         </a>
                         <a href="#fitur" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300 text-center">
@@ -122,34 +255,113 @@
                     </div>
                 </div>
                 
-                <!-- Right Content - Illustration -->
+                <!-- Right Content - Interactive Dashboard -->
                 <div class="relative" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
                     <div class="relative z-10 float-animation">
                         <div class="w-full max-w-lg mx-auto">
-                            <!-- Main Water Tank Illustration -->
+                            <!-- Main Dashboard Card -->
                             <div class="relative bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                                <!-- Water Tank -->
-                                <div class="water-animation rounded-2xl h-64 relative overflow-hidden">
-                                    <div class="absolute inset-0 flex items-center justify-center">
-                                        <svg class="w-24 h-24 text-white/80" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                                        </svg>
+                                <!-- Dashboard Header -->
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-white font-semibold">Dashboard Monitoring</h3>
+                                    <div class="flex space-x-2">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                        <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                        <div class="w-2 h-2 bg-red-400 rounded-full"></div>
                                     </div>
-                                    <!-- Water Level Animation -->
-                                    <div class="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-blue-400 to-cyan-300 opacity-60"></div>
                                 </div>
                                 
-                                <!-- Dashboard Preview -->
-                                <div class="mt-6 grid grid-cols-2 gap-4">
-                                    <div class="bg-white/20 rounded-lg p-3 text-center">
-                                        <div class="text-2xl font-bold text-white">1,234</div>
-                                        <div class="text-white/80 text-xs">m³ Total</div>
+                                <!-- Water Quality Visualization -->
+                                <div class="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-2xl p-6 mb-6">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span class="text-white/80 text-sm">Visualisasi Kualitas Air</span>
+                                        <span class="px-2 py-1 bg-cyan-400/20 text-cyan-300 rounded text-xs">Real-time</span>
                                     </div>
-                                    <div class="bg-white/20 rounded-lg p-3 text-center">
-                                        <div class="text-2xl font-bold text-white">98%</div>
-                                        <div class="text-white/80 text-xs">Efisiensi</div>
+                                    
+                                    <!-- Water Tank dengan Animasi -->
+                                    <div class="relative h-40 bg-white/10 rounded-xl overflow-hidden">
+                                        <!-- Water Level berdasarkan kekeruhan -->
+                                        @if($latest)
+                                            <div id="water-level" class="absolute bottom-0 left-0 right-0 transition-all duration-1000
+                                                @if($latest->turbidity <= 5) bg-gradient-to-t from-blue-400 to-cyan-300
+                                                @elseif($latest->turbidity <= 25) bg-gradient-to-t from-blue-400 to-blue-300
+                                                @elseif($latest->turbidity <= 50) bg-gradient-to-t from-yellow-400 to-yellow-300
+                                                @else bg-gradient-to-t from-orange-400 to-yellow-400
+                                                @endif opacity-80"
+                                                style="height: {{ min(90, max(20, 100 - $latest->turbidity)) }}%;">
+                                                <!-- Bubble Animation -->
+                                                <div class="absolute inset-0">
+                                                    <div class="bubble" style="left: 20%; animation-delay: 0s;"></div>
+                                                    <div class="bubble" style="left: 50%; animation-delay: 1s;"></div>
+                                                    <div class="bubble" style="left: 80%; animation-delay: 2s;"></div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-blue-400 to-cyan-300 opacity-60">
+                                                <div class="absolute inset-0">
+                                                    <div class="bubble" style="left: 20%; animation-delay: 0s;"></div>
+                                                    <div class="bubble" style="left: 50%; animation-delay: 1s;"></div>
+                                                    <div class="bubble" style="left: 80%; animation-delay: 2s;"></div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        
+                                        <!-- Sensor Icon -->
+                                        <div class="absolute top-4 right-4">
+                                            <svg class="w-6 h-6 text-white/60" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
+                                
+                                <!-- Dashboard Stats Grid -->
+                                {{-- <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-lg p-3">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-white/60 text-xs">Debit Air</span>
+                                            <svg class="w-3 h-3 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-2xl font-bold text-white">156</div>
+                                        <div class="text-white/60 text-xs">L/detik</div>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-r from-emerald-500/20 to-green-500/20 rounded-lg p-3">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-white/60 text-xs">Tekanan</span>
+                                            <svg class="w-3 h-3 text-green-300" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-2xl font-bold text-white">2.8</div>
+                                        <div class="text-white/60 text-xs">Bar</div>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg p-3">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-white/60 text-xs">pH Air</span>
+                                            <svg class="w-3 h-3 text-purple-300" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 1 1 0 000 2H6a2 2 0 100 4h2a2 2 0 100 4h-2a1 1 0 100 2 2 2 0 01-2-2V5z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-2xl font-bold text-white">7.2</div>
+                                        <div class="text-white/60 text-xs">Normal</div>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-lg p-3">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-white/60 text-xs">Suhu</span>
+                                            <svg class="w-3 h-3 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-2xl font-bold text-white">27°</div>
+                                        <div class="text-white/60 text-xs">Celsius</div>
+                                    </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -648,6 +860,217 @@
                 }
             });
         });
+        
+        // Real-time update untuk monitoring kekeruhan air
+        let lastTimestamp = {{ $latest ? $latest->recorded_at->timestamp : 0 }};
+        let updateInterval = 5000; // Update setiap 5 detik
+        let isUpdating = false;
+        
+        function updateTurbidityData() {
+            if (isUpdating) return;
+            isUpdating = true;
+            
+            fetch('/api/turbidity/latest')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const turbidityData = data.data;
+                        
+                        // Check if data is new
+                        if (turbidityData.timestamp > lastTimestamp) {
+                            lastTimestamp = turbidityData.timestamp;
+                            
+                            // Animate update indicator
+                            showUpdateNotification();
+                            
+                            // Update nilai kekeruhan dengan animasi
+                            updateValueWithAnimation('turbidity-value', turbidityData.turbidity);
+                            
+                            // Update status
+                            updateStatus(turbidityData);
+                            
+                            // Update waktu
+                            updateTime(turbidityData);
+                            
+                            // Update progress bar
+                            updateProgressBar(turbidityData);
+                            
+                            // Update water tank visualization
+                            updateWaterTank(turbidityData);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching turbidity data:', error);
+                })
+                .finally(() => {
+                    isUpdating = false;
+                });
+        }
+        
+        function updateValueWithAnimation(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            const currentValue = parseFloat(element.textContent) || 0;
+            const startTime = Date.now();
+            const duration = 1000; // 1 second animation
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                
+                const value = currentValue + (newValue - currentValue) * easeOutQuart;
+                element.textContent = value.toFixed(1);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    element.textContent = newValue;
+                }
+            }
+            
+            animate();
+        }
+        
+        function updateStatus(data) {
+            const statusElement = document.getElementById('status-text');
+            const statusDescElement = document.getElementById('status-description');
+            
+            if (statusElement) {
+                statusElement.className = '';
+                statusElement.textContent = data.status;
+                
+                // Apply color class based on status
+                switch(data.statusColor) {
+                    case 'green':
+                        statusElement.className = 'text-green-400';
+                        break;
+                    case 'yellow':
+                        statusElement.className = 'text-yellow-400';
+                        break;
+                    case 'orange':
+                        statusElement.className = 'text-orange-400';
+                        break;
+                    case 'red':
+                        statusElement.className = 'text-red-400';
+                        break;
+                }
+            }
+            
+            if (statusDescElement) {
+                statusDescElement.textContent = data.statusDescription;
+            }
+        }
+        
+        function updateTime(data) {
+            const timeElement = document.getElementById('update-time');
+            const dateElement = document.getElementById('update-date');
+            
+            if (timeElement) {
+                timeElement.textContent = data.recordedAt;
+            }
+            
+            if (dateElement) {
+                dateElement.textContent = data.recordedDate;
+            }
+        }
+        
+        function updateProgressBar(data) {
+            const progressBar = document.getElementById('quality-progress');
+            const progressText = document.getElementById('quality-percentage');
+            
+            if (progressBar) {
+                progressBar.style.width = data.qualityPercentage + '%';
+                
+                // Update color based on quality
+                progressBar.className = 'h-full rounded-full transition-all duration-1000 ';
+                if (data.turbidity <= 5) {
+                    progressBar.className += 'bg-gradient-to-r from-green-400 to-emerald-400';
+                } else if (data.turbidity <= 25) {
+                    progressBar.className += 'bg-gradient-to-r from-yellow-400 to-amber-400';
+                } else if (data.turbidity <= 50) {
+                    progressBar.className += 'bg-gradient-to-r from-orange-400 to-orange-500';
+                } else {
+                    progressBar.className += 'bg-gradient-to-r from-red-400 to-red-500';
+                }
+            }
+            
+            if (progressText) {
+                progressText.textContent = data.qualityPercentage + '%';
+            }
+        }
+        
+        function updateWaterTank(data) {
+            const waterLevel = document.getElementById('water-level');
+            if (waterLevel) {
+                const height = Math.min(90, Math.max(20, 100 - data.turbidity));
+                waterLevel.style.height = height + '%';
+                
+                // Update water color based on turbidity
+                waterLevel.className = 'absolute bottom-0 left-0 right-0 transition-all duration-1000 opacity-80';
+                if (data.turbidity <= 5) {
+                    waterLevel.className += ' bg-gradient-to-t from-blue-400 to-cyan-300';
+                } else if (data.turbidity <= 25) {
+                    waterLevel.className += ' bg-gradient-to-t from-blue-400 to-blue-300';
+                } else if (data.turbidity <= 50) {
+                    waterLevel.className += ' bg-gradient-to-t from-yellow-400 to-yellow-300';
+                } else {
+                    waterLevel.className += ' bg-gradient-to-t from-orange-400 to-yellow-400';
+                }
+            }
+        }
+        
+        function showUpdateNotification() {
+            // Create notification element if it doesn't exist
+            let notification = document.getElementById('update-notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'update-notification';
+                notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50 flex items-center';
+                notification.innerHTML = `
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    Data kekeruhan diperbarui!
+                `;
+                document.body.appendChild(notification);
+            }
+            
+            // Show notification
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+            }, 100);
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('translate-x-0');
+                notification.classList.add('translate-x-full');
+            }, 3000);
+        }
+        
+        // Start auto-update if there's existing data
+        @if($latest)
+        setInterval(updateTurbidityData, updateInterval);
+        
+        // Initial check after 2 seconds
+        setTimeout(updateTurbidityData, 2000);
+        @endif
+        
+        // Visual indicator for live connection
+        let pulseInterval = setInterval(() => {
+            const liveIndicator = document.querySelector('.animate-pulse');
+            if (liveIndicator) {
+                liveIndicator.style.opacity = '1';
+                setTimeout(() => {
+                    liveIndicator.style.opacity = '0.8';
+                }, 500);
+            }
+        }, 2000);
     </script>
 </body>
 </html>
