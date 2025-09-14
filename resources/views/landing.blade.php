@@ -282,22 +282,41 @@
                                     <div class="relative h-40 bg-white/10 rounded-xl overflow-hidden">
                                         <!-- Water Level berdasarkan kekeruhan -->
                                         @if($latest)
-                                            <div id="water-level" class="absolute bottom-0 left-0 right-0 transition-all duration-1000
-                                                @if($latest->turbidity <= 5) bg-gradient-to-t from-blue-400 to-cyan-300
-                                                @elseif($latest->turbidity <= 25) bg-gradient-to-t from-blue-400 to-blue-300
-                                                @elseif($latest->turbidity <= 50) bg-gradient-to-t from-yellow-400 to-yellow-300
-                                                @else bg-gradient-to-t from-orange-400 to-yellow-400
-                                                @endif opacity-80"
+                                            <div id="water-level" class="absolute bottom-0 left-0 right-0 transition-all duration-1000"
                                                 style="height: {{ min(90, max(20, 100 - $latest->turbidity)) }}%;">
-                                                <!-- Bubble Animation -->
-                                                <div class="absolute inset-0">
-                                                    <div class="bubble" style="left: 20%; animation-delay: 0s;"></div>
-                                                    <div class="bubble" style="left: 50%; animation-delay: 1s;"></div>
-                                                    <div class="bubble" style="left: 80%; animation-delay: 2s;"></div>
+                                                <!-- Dynamic water color based on turbidity -->
+                                                <div class="absolute inset-0"
+                                                    @if($latest->turbidity <= 5)
+                                                        style="background: linear-gradient(to top, rgba(59, 130, 246, 0.9), rgba(147, 197, 253, 0.7));" {{-- Clear blue water --}}
+                                                    @elseif($latest->turbidity <= 15)
+                                                        style="background: linear-gradient(to top, rgba(59, 130, 246, 0.85), rgba(165, 180, 252, 0.65));" {{-- Slightly less clear --}}
+                                                    @elseif($latest->turbidity <= 25)
+                                                        style="background: linear-gradient(to top, rgba(96, 165, 250, 0.8), rgba(186, 230, 253, 0.6));" {{-- Light blue with slight cloudiness --}}
+                                                    @elseif($latest->turbidity <= 35)
+                                                        style="background: linear-gradient(to top, rgba(148, 163, 184, 0.85), rgba(203, 213, 225, 0.65));" {{-- Grayish blue (murky) --}}
+                                                    @elseif($latest->turbidity <= 50)
+                                                        style="background: linear-gradient(to top, rgba(161, 161, 170, 0.9), rgba(212, 212, 216, 0.7));" {{-- Gray murky water --}}
+                                                    @elseif($latest->turbidity <= 75)
+                                                        style="background: linear-gradient(to top, rgba(180, 157, 105, 0.9), rgba(217, 196, 145, 0.75));" {{-- Muddy yellow-brown --}}
+                                                    @else
+                                                        style="background: linear-gradient(to top, rgba(146, 125, 89, 0.95), rgba(181, 159, 122, 0.8));" {{-- Very muddy brown --}}
+                                                    @endif
+                                                >
+                                                    <!-- Bubble Animation (less visible for murky water) -->
+                                                    <div class="absolute inset-0">
+                                                        <div class="bubble" style="left: 20%; animation-delay: 0s; opacity: {{ $latest->turbidity > 50 ? '0.3' : '1' }};"></div>
+                                                        <div class="bubble" style="left: 50%; animation-delay: 1s; opacity: {{ $latest->turbidity > 50 ? '0.3' : '1' }};"></div>
+                                                        <div class="bubble" style="left: 80%; animation-delay: 2s; opacity: {{ $latest->turbidity > 50 ? '0.3' : '1' }};"></div>
+                                                    </div>
+                                                    
+                                                    <!-- Turbidity particles effect for murky water -->
+                                                    @if($latest->turbidity > 25)
+                                                        <div class="absolute inset-0" style="opacity: {{ min(0.6, $latest->turbidity / 100) }}; background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);"></div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @else
-                                            <div class="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-blue-400 to-cyan-300 opacity-60">
+                                            <div class="absolute bottom-0 left-0 right-0 h-3/4" style="background: linear-gradient(to top, rgba(59, 130, 246, 0.9), rgba(147, 197, 253, 0.7));">
                                                 <div class="absolute inset-0">
                                                     <div class="bubble" style="left: 20%; animation-delay: 0s;"></div>
                                                     <div class="bubble" style="left: 50%; animation-delay: 1s;"></div>
@@ -1010,16 +1029,64 @@
                 const height = Math.min(90, Math.max(20, 100 - data.turbidity));
                 waterLevel.style.height = height + '%';
                 
-                // Update water color based on turbidity
-                waterLevel.className = 'absolute bottom-0 left-0 right-0 transition-all duration-1000 opacity-80';
+                // Find the inner water div that contains the color
+                let waterColorDiv = waterLevel.querySelector('.water-color');
+                if (!waterColorDiv) {
+                    // Create the structure if it doesn't exist
+                    waterLevel.innerHTML = `
+                        <div class="absolute inset-0 water-color">
+                            <div class="absolute inset-0">
+                                <div class="bubble" style="left: 20%; animation-delay: 0s;"></div>
+                                <div class="bubble" style="left: 50%; animation-delay: 1s;"></div>
+                                <div class="bubble" style="left: 80%; animation-delay: 2s;"></div>
+                            </div>
+                        </div>
+                    `;
+                    waterColorDiv = waterLevel.querySelector('.water-color');
+                }
+                
+                // Update water color and opacity based on turbidity
                 if (data.turbidity <= 5) {
-                    waterLevel.className += ' bg-gradient-to-t from-blue-400 to-cyan-300';
+                    // Clear blue water
+                    waterColorDiv.style.background = 'linear-gradient(to top, rgba(59, 130, 246, 0.9), rgba(147, 197, 253, 0.7))';
+                } else if (data.turbidity <= 15) {
+                    // Slightly less clear
+                    waterColorDiv.style.background = 'linear-gradient(to top, rgba(59, 130, 246, 0.85), rgba(165, 180, 252, 0.65))';
                 } else if (data.turbidity <= 25) {
-                    waterLevel.className += ' bg-gradient-to-t from-blue-400 to-blue-300';
+                    // Light blue with slight cloudiness
+                    waterColorDiv.style.background = 'linear-gradient(to top, rgba(96, 165, 250, 0.8), rgba(186, 230, 253, 0.6))';
+                } else if (data.turbidity <= 35) {
+                    // Grayish blue (murky)
+                    waterColorDiv.style.background = 'linear-gradient(to top, rgba(148, 163, 184, 0.85), rgba(203, 213, 225, 0.65))';
                 } else if (data.turbidity <= 50) {
-                    waterLevel.className += ' bg-gradient-to-t from-yellow-400 to-yellow-300';
+                    // Gray murky water
+                    waterColorDiv.style.background = 'linear-gradient(to top, rgba(161, 161, 170, 0.9), rgba(212, 212, 216, 0.7))';
+                } else if (data.turbidity <= 75) {
+                    // Muddy yellow-brown
+                    waterColorDiv.style.background = 'linear-gradient(to top, rgba(180, 157, 105, 0.9), rgba(217, 196, 145, 0.75))';
                 } else {
-                    waterLevel.className += ' bg-gradient-to-t from-orange-400 to-yellow-400';
+                    // Very muddy brown
+                    waterColorDiv.style.background = 'linear-gradient(to top, rgba(146, 125, 89, 0.95), rgba(181, 159, 122, 0.8))';
+                }
+                
+                // Update bubble opacity for murky water
+                const bubbles = waterLevel.querySelectorAll('.bubble');
+                bubbles.forEach(bubble => {
+                    bubble.style.opacity = data.turbidity > 50 ? '0.3' : '1';
+                });
+                
+                // Add or remove turbidity particles effect
+                let particlesDiv = waterColorDiv.querySelector('.turbidity-particles');
+                if (data.turbidity > 25) {
+                    if (!particlesDiv) {
+                        particlesDiv = document.createElement('div');
+                        particlesDiv.className = 'absolute inset-0 turbidity-particles';
+                        waterColorDiv.appendChild(particlesDiv);
+                    }
+                    particlesDiv.style.opacity = Math.min(0.6, data.turbidity / 100);
+                    particlesDiv.style.backgroundImage = 'repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px)';
+                } else if (particlesDiv) {
+                    particlesDiv.remove();
                 }
             }
         }

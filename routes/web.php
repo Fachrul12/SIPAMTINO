@@ -13,7 +13,7 @@ use App\Http\Controllers\TurbidityController;
 Route::get('/', function () {
     $latest = Turbidity::latest('recorded_at')->first();
     return view('landing', compact('latest'));
-});
+})->name('landing');
 
 // API Route for getting latest turbidity data
 Route::get('/api/turbidity/latest', [TurbidityController::class, 'getLatest'])->name('api.turbidity.latest');
