@@ -93,6 +93,9 @@
                 </div>
                 
                 <div class="flex items-center space-x-4">
+                    <a href="{{ route('pendaftaran.form') }}" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200">
+                        Daftar Akun
+                    </a>
                     <a href="/login" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-medium">
                         Masuk Sistem
                     </a>

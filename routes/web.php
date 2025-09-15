@@ -8,6 +8,7 @@ use App\Filament\Pages\AdminDashboard;
 use App\Filament\Pages\PetugasDashboard;
 use App\Filament\Pages\PelangganDashboard;
 use App\Http\Controllers\TurbidityController;
+use App\Http\Controllers\PendaftaranController;
 
 
 Route::get('/', function () {
@@ -51,7 +52,10 @@ Route::get('/demo/progress-meter', function () {
     return view('progress-meter-demo');
 })->name('demo.progress-meter');
 
-// web.php
+// Route pendaftaran pelanggan
+Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
+Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
+Route::get('/pendaftaran/sukses', [PendaftaranController::class, 'sukses'])->name('pendaftaran.sukses');
 
 
 

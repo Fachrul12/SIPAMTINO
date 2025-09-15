@@ -102,7 +102,7 @@
                                 </div>
                             </div>
                             
-                            <a href="{{ route('landing') }}" class="w-full inline-flex justify-center items-center px-6 py-3 border-2 border-purple-300 dark:border-purple-600 rounded-2xl text-purple-600 dark:text-purple-400 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium transition-all duration-200 hover:scale-[1.02] group">
+                            <a href="{{ route('pendaftaran.form') }}" class="w-full inline-flex justify-center items-center px-6 py-3 border-2 border-purple-300 dark:border-purple-600 rounded-2xl text-purple-600 dark:text-purple-400 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium transition-all duration-200 hover:scale-[1.02] group">
                                 <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z"/>
                                 </svg>
