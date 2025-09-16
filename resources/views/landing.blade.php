@@ -244,7 +244,7 @@
                     <!-- Stats -->
                     <div class="grid grid-cols-3 gap-8 pt-8 border-t border-blue-400/30">
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-cyan-300">500+</div>
+                            <div class="text-3xl font-bold text-cyan-300">{{ \App\Models\Pelanggan::count() }}</div>
                             <div class="text-blue-200 text-sm">Pelanggan Aktif</div>
                         </div>
                         <div class="text-center">

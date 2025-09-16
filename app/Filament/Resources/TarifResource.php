@@ -23,7 +23,7 @@ class TarifResource extends Resource
 
     public static function canAccess(): bool
     {
-        return Auth::user()->role_id === 1;
+        return Auth::user()->role_id === 4;
     }
 
     public static function form(Form $form): Form

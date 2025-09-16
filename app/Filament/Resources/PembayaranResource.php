@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Columns\BadgeColumn;
+use Illuminate\Database\Eloquent\Model;
 
 class PembayaranResource extends Resource
 {
@@ -28,10 +29,20 @@ class PembayaranResource extends Resource
     /** =======================
      *  AUTHORIZATION
      *  ======================= */
+    public static function shouldRegisterNavigation(): bool
+    {
+    return in_array(Auth::user()->role_id, [1, 2]);
+    }
+
+    public static function canViewAny(): bool
+    {
+    return in_array(Auth::user()->role_id, [1, 2]);
+    }
+
     public static function canCreate(): bool
     {
         return Auth::user()->role_id === 1 || Auth::user()->role_id === 2; // admin dan petugas
-    }
+    }    
 
     public static function canEdit($record): bool
     {
