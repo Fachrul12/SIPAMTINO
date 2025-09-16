@@ -43,7 +43,17 @@ class PengaduanResource extends Resource
                     ->label('Foto')
                     ->image()
                     ->directory('pengaduan-foto')
-                    ->visibility('public'),
+                    ->visibility('public')
+                    ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])
+                    ->maxSize(2048) // 2MB dalam kilobytes
+                    ->imagePreviewHeight('250')
+                    ->loadingIndicatorPosition('left')
+                    ->panelAspectRatio('2:1')
+                    ->panelLayout('integrated')
+                    ->removeUploadedFileButtonPosition('right')
+                    ->uploadButtonPosition('left')
+                    ->uploadProgressIndicatorPosition('left')
+                    ->helperText('Format: JPG, JPEG, PNG, GIF. Maksimal ukuran: 2MB'),
 
                 Forms\Components\Textarea::make('deskripsi')
                     ->label('Deskripsi')
@@ -55,16 +65,23 @@ class PengaduanResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('No')
+                    ->sortable()
+                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Pelanggan')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('jenis_pengaduan')
-                    ->label('Jenis'),
+                    ->label('Jenis')
+                    ->wrap(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal')
-                    ->dateTime('d M Y H:i'),
+                    ->dateTime('d M Y H:i')
+                    ->sortable(),
 
                 Tables\Columns\BadgeColumn::make('status')
                     ->colors([
@@ -76,7 +93,7 @@ class PengaduanResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\Action::make('selesai')
                     ->label('Selesai')
-                    ->visible(fn ($record) => Auth::user()->role_id === 1 && $record->status === 'Belum diproses')
+                    ->visible(fn ($record) => Auth::user()->role_id === 1 && $record->status === 'Belum Diproses')
                     ->action(fn ($record) => $record->update(['status' => 'Selesai']))
                     ->requiresConfirmation()
                     ->color('success')
@@ -104,4 +121,10 @@ class PengaduanResource extends Resource
 
         return $query;
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('status', 'Belum Diproses')->count();
+    }
+
 }

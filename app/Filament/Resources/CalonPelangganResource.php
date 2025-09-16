@@ -222,9 +222,5 @@ class CalonPelangganResource extends Resource
     {
         return static::getModel()::where('status', 'pending')->count();
     }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'warning';
-    }
+    
 }

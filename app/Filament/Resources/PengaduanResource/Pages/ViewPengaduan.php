@@ -30,6 +30,7 @@ class ViewPengaduan extends ViewRecord
                     ->schema([
                         Grid::make(2) // 2 kolom
                             ->schema([
+                                TextEntry::make('id')->label('No. Pengaduan'),
                                 TextEntry::make('user.name')->label('Nama Pelanggan'),
                                 TextEntry::make('jenis_pengaduan')->label('Jenis'),
                                 TextEntry::make('status')
@@ -44,8 +45,16 @@ class ViewPengaduan extends ViewRecord
 
                         ImageEntry::make('foto')
                             ->label('Foto')
-                            ->getStateUsing(fn ($record) => $record->foto ? asset('storage/' . $record->foto) : null)
-                            ->columnSpanFull(),
+                            ->disk('public')
+                            ->size(400)
+                            ->square()
+                            ->visibility('public')
+                            ->getStateUsing(fn ($record) => $record->foto)
+                            ->extraAttributes([
+                                'style' => 'cursor: pointer; border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);'
+                            ])
+                            ->columnSpanFull()
+                            ->hiddenLabel(false),
                         
                     ]),
             ]);
@@ -58,6 +67,7 @@ class ViewPengaduan extends ViewRecord
                 ->schema([
                     Grid::make(2)
                         ->schema([
+                            TextEntry::make('id')->label('No. Pengaduan'),
                             TextEntry::make('jenis_pengaduan')->label('Jenis'),
                             TextEntry::make('status')
                                 ->label('Status')
@@ -71,8 +81,16 @@ class ViewPengaduan extends ViewRecord
 
                     ImageEntry::make('foto')
                         ->label('Foto')
-                        ->getStateUsing(fn ($record) => $record->foto ? asset('storage/' . $record->foto) : null)
-                        ->columnSpanFull(),
+                        ->disk('public')
+                        ->size(400)
+                        ->square()
+                        ->visibility('public')
+                        ->getStateUsing(fn ($record) => $record->foto)
+                        ->extraAttributes([
+                            'style' => 'cursor: pointer; border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);'
+                        ])
+                        ->columnSpanFull()
+                        ->hiddenLabel(false),
                     
                 ]),
         ]);

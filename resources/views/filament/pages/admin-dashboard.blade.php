@@ -86,7 +86,7 @@
                 <div>
                     <p class="text-amber-600 dark:text-amber-400 text-sm font-medium uppercase tracking-wide">Pengaduan</p>
                     <p class="text-3xl font-bold text-amber-900 dark:text-amber-100 mt-2">
-                        {{ \App\Models\Pengaduan::where('status', '!=', 'diproses')->orWhereNull('status')->count() }}
+                        {{ \App\Models\Pengaduan::where('status', '!=', 'Selesai')->orWhereNull('status')->count() }}
                     </p>
                     <p class="text-amber-700 dark:text-amber-300 text-sm mt-1">Belum diproses</p>
                 </div>

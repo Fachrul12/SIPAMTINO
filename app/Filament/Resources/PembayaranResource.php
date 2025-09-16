@@ -246,9 +246,5 @@ class PembayaranResource extends Resource
             'edit' => Pages\EditPembayaran::route('/{record}/edit'),
         ];
     }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::where('status', 'belum_lunas')->count();
-    }
+    
 }
