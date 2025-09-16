@@ -12,6 +12,8 @@ class Pembayaran extends Model
         'pemakaian_id',
         'periode_id',
         'jumlah_bayar',
+        'jumlah_dibayar',
+        'kembalian',
         'status',
         'tanggal_bayar',
     ];
