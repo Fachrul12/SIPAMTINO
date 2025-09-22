@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pemakaian extends Model
 {
+    protected $table = 'pemakaians';
     protected $fillable = ['pelanggan_id', 'periode_id', 'meter_awal', 'meter_akhir', 'total_pakai', 'tagihan'];
     protected $appends = ['status'];
 

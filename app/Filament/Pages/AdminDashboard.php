@@ -20,13 +20,16 @@ class AdminDashboard extends Page
     {
         return Auth::user()?->role_id === 1;
     }
+    
 
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            TurbidityChart::class,
-        ];
-    }
+    public function getPeriodeOptions()
+{
+    return Periode::orderBy('tahun', 'desc')
+        ->orderByRaw("FIELD(bulan, 'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember')")
+        ->pluck('nama_periode', 'id')
+        ->toArray();
+}
+
 
     /**
      * Get comprehensive system statistics
@@ -69,6 +72,12 @@ class AdminDashboard extends Page
                                        ->whereYear('tanggal_bayar', Carbon::now()->year)
                                        ->sum('jumlah_bayar');
         $tagihanBelumBayar = Pembayaran::where('status', 'belum_lunas')->count();
+
+        //calon Pelanggan
+        $calonPelangganPending = \App\Models\CalonPelanggan::where('status', 'pending')->count();
+        $calonPelangganApproved = \App\Models\CalonPelanggan::where('status', 'approved')->count();
+        $calonPelangganRejected = \App\Models\CalonPelanggan::where('status', 'rejected')->count();
+
         
         return [
             // User Stats
@@ -98,53 +107,76 @@ class AdminDashboard extends Page
             'total_pendapatan' => $totalPendapatan,
             'pendapatan_bulan_ini' => $pendapatanBulanIni,
             'tagihan_belum_bayar' => $tagihanBelumBayar,
+
+            //calon pelanggan
+            'calon_pelanggan_pending' => $calonPelangganPending,
+            'calon_pelanggan_approved' => $calonPelangganApproved,
+            'calon_pelanggan_rejected' => $calonPelangganRejected,
+
             
             // Periode Info
             'periode_aktif' => $periodeAktif?->nama_periode ?? 'Tidak ada periode aktif',
             'tanggal_hari_ini' => Carbon::now()->format('d M Y')
+
+            
         ];
     }
 
-    /**
-     * Get monthly statistics for charts
-     */
     public function getMonthlyStats(): array
-    {
-        $months = [];
-        $pemakaianData = [];
-        $pendapatanData = [];
-        $pengaduanData = [];
-        
-        for ($i = 5; $i >= 0; $i--) {
-            $date = Carbon::now()->subMonths($i);
-            $months[] = $date->format('M Y');
-            
-            // Pemakaian per bulan
-            $periode = Periode::where('nama_periode', 'like', '%' . $date->format('M Y') . '%')
-                             ->orWhere('nama_periode', 'like', '%' . $date->format('F Y') . '%')
-                             ->first();
-            $pemakaianBulan = $periode ? Pemakaian::where('periode_id', $periode->id)->sum('total_pakai') : 0;
-            $pemakaianData[] = $pemakaianBulan;
-            
-            // Pendapatan per bulan
-            $pendapatanBulan = Pembayaran::where('status', 'lunas')
-                                        ->whereMonth('tanggal_bayar', $date->month)
-                                        ->whereYear('tanggal_bayar', $date->year)
-                                        ->sum('jumlah_bayar');
-            $pendapatanData[] = $pendapatanBulan;
-            
-            // Pengaduan per bulan
-            $pengaduanBulan = Pengaduan::whereMonth('created_at', $date->month)
-                                      ->whereYear('created_at', $date->year)
-                                      ->count();
-            $pengaduanData[] = $pengaduanBulan;
-        }
-        
-        return [
-            'months' => $months,
-            'pemakaian_data' => $pemakaianData,
-            'pendapatan_data' => $pendapatanData,
-            'pengaduan_data' => $pengaduanData
-        ];
+{
+    $months = [];
+    $pemakaianData = [];
+
+    // Ambil daftar tahun yang tersedia (distinct, urut desc) dan pastikan int
+    $availableYears = \App\Models\Periode::select('tahun')
+        ->distinct()
+        ->orderBy('tahun', 'desc')
+        ->pluck('tahun')
+        ->map(fn($y) => (int) $y);
+    
+    $requestedYear = request()->query('tahun');
+    $requestedYear = $requestedYear !== null ? (int) $requestedYear : null;  
+    
+    if ($requestedYear && $availableYears->contains($requestedYear)) {
+        $selectedYear = $requestedYear;
+    } elseif ($availableYears->contains((int) now()->year)) {
+        $selectedYear = (int) now()->year;
+    } else {
+        $selectedYear = $availableYears->first() ?? (int) now()->year;
+    }  
+
+    // Mapping bulan Indonesia
+    $bulanIndonesia = [
+        1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+        5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+        9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+    ];
+
+    for ($month = 1; $month <= 12; $month++) {
+        $namaBulan = $bulanIndonesia[$month];
+        $months[] = $namaBulan . ' ' . $selectedYear;
+
+        $periode = \App\Models\Periode::whereRaw('LOWER(TRIM(bulan)) = ?', [strtolower($namaBulan)])
+            ->where('tahun', $selectedYear)
+            ->first();
+
+        $pemakaianBulan = $periode
+            ? \App\Models\Pemakaian::where('periode_id', $periode->id)->sum('total_pakai')
+            : 0;
+
+        $pemakaianData[] = $pemakaianBulan;
     }
+
+    return [
+        'months' => $months,
+        'pemakaian_data' => $pemakaianData,
+        'selectedYear' => $selectedYear,
+        'availableYears' => $availableYears,
+    ];
+}
+
+     
+
+    
+
 }
