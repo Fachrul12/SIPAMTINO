@@ -6,6 +6,9 @@ use Filament\Pages\Page;
 use Illuminate\Support\Facades\Auth;
 use App\Models\{User, Pelanggan, Pemakaian, Pembayaran, Pengaduan, Periode};
 use App\Filament\Resources\WidgetResource\Widgets\TurbidityChart;
+use App\Filament\Resources\WidgetResource\Widgets\ProgressPencatatanWidget;
+use App\Filament\Resources\WidgetResource\Widgets\KeuanganWidget;
+use App\Filament\Resources\WidgetResource\Widgets\PemakaianAirChart;
 use Carbon\Carbon;
 
 class AdminDashboard extends Page
@@ -30,6 +33,16 @@ class AdminDashboard extends Page
         ->toArray();
 }
 
+    protected function getFooterWidgets(): array
+    {
+        return [            
+            TurbidityChart::class,
+            PemakaianAirChart::class,
+            ProgressPencatatanWidget::class,
+            KeuanganWidget::class,        
+        ];
+    }
+    
 
     /**
      * Get comprehensive system statistics
