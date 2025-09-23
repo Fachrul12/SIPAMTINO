@@ -35,7 +35,8 @@ class CalonPelangganResource extends Resource
     public static function canAccess(): bool
     {
         return Auth::user()->role_id === 1; // Hanya admin
-    }
+    }    
+
 
     public static function form(Form $form): Form
     {

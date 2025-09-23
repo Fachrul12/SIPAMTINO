@@ -9,6 +9,7 @@ use App\Filament\Resources\WidgetResource\Widgets\TurbidityChart;
 use App\Filament\Resources\WidgetResource\Widgets\ProgressPencatatanWidget;
 use App\Filament\Resources\WidgetResource\Widgets\KeuanganWidget;
 use App\Filament\Resources\WidgetResource\Widgets\PemakaianAirChart;
+use App\Filament\Resources\WidgetResource\Widgets\SystemStats;
 use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -57,12 +58,19 @@ class AdminDashboard extends Page
     }
 
     public function getPeriodeOptions()
-{
+    {   
     return Periode::orderBy('tahun', 'desc')
         ->orderByRaw("FIELD(bulan, 'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember')")
         ->pluck('nama_periode', 'id')
         ->toArray();
-}
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            SystemStats::class,
+        ];
+    }
 
     protected function getFooterWidgets(): array
     {

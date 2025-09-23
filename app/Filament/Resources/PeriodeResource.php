@@ -84,27 +84,41 @@ class PeriodeResource extends Resource
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('nama_periode')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('bulan')->sortable(),
-                Tables\Columns\TextColumn::make('tahun')->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Dibuat Pada')
-                    ->dateTime(),
-                Tables\Columns\BadgeColumn::make('status')
-                    ->colors([
-                        'success' => 'aktif',
-                        'danger' => 'nonaktif',
-                    ])
-                    ->sortable(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ]);
-    }
+{
+    return $table
+        ->columns([
+            Tables\Columns\TextColumn::make('nama_periode')->sortable()->searchable(),
+            Tables\Columns\TextColumn::make('bulan')->sortable(),
+            Tables\Columns\TextColumn::make('tahun')->sortable(),
+            Tables\Columns\TextColumn::make('created_at')
+                ->label('Dibuat Pada')
+                ->dateTime(),
+            Tables\Columns\BadgeColumn::make('status')
+                ->colors([
+                    'success' => 'aktif',
+                    'danger' => 'nonaktif',
+                ])
+                ->sortable(),
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+            Tables\Actions\Action::make('aktifkan')
+                ->label('Aktifkan')
+                ->icon('heroicon-o-check-circle')
+                ->color('success')
+                ->visible(fn ($record) => $record->status !== 'aktif') // hanya tampil kalau belum aktif
+                ->requiresConfirmation()
+                ->action(function ($record) {
+                    // set semua periode lain ke nonaktif
+                    Periode::where('id', '!=', $record->id)->update(['status' => 'nonaktif']);
+                    
+                    // aktifkan periode ini
+                    $record->update(['status' => 'aktif']);
+                }),
+        ]);
+}
+
 
     public static function getRelations(): array
     {

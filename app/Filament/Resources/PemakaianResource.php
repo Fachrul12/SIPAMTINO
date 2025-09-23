@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\ViewField;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
-
+use App\Filament\Resources\WidgetResource\Widgets\PemakaianWidget;
 
 
 class PemakaianResource extends Resource
@@ -59,6 +59,13 @@ class PemakaianResource extends Resource
     public static function canDeleteAny(): bool
     {
         return Auth::user()->role_id === 2;
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+           PemakaianWidget::class,
+        ];
     }
 
     /** =======================
