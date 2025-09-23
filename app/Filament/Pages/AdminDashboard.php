@@ -9,6 +9,9 @@ use App\Filament\Resources\WidgetResource\Widgets\TurbidityChart;
 use App\Filament\Resources\WidgetResource\Widgets\ProgressPencatatanWidget;
 use App\Filament\Resources\WidgetResource\Widgets\KeuanganWidget;
 use App\Filament\Resources\WidgetResource\Widgets\PemakaianAirChart;
+use Filament\Forms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Carbon\Carbon;
 
 class AdminDashboard extends Page
@@ -23,7 +26,35 @@ class AdminDashboard extends Page
     {
         return Auth::user()?->role_id === 1;
     }
+
+
+    use InteractsWithForms;
+
+    public ?int $selectedYear = null;
+
+    public function mount(): void
+    {
+        // default ke tahun sekarang
+        $this->selectedYear = now()->year;
+    }    
     
+    protected function getFormSchema(): array
+    {
+        return [
+            Forms\Components\Select::make('selectedYear')
+                ->label('Pilih Tahun')
+                ->options(
+                    \App\Models\Periode::select('tahun')
+                        ->distinct()
+                        ->orderBy('tahun', 'desc')
+                        ->pluck('tahun', 'tahun')
+                        ->toArray()
+                )
+                ->default(now()->year)
+                ->reactive()
+                ->afterStateUpdated(fn () => $this->dispatch('$refresh')),
+        ];
+    }
 
     public function getPeriodeOptions()
 {
