@@ -5,6 +5,7 @@ namespace App\Filament\Resources\WidgetResource\Widgets;
 use App\Models\Pemakaian;
 use App\Models\Periode;
 use App\Models\Pembayaran;
+use App\Models\Pelanggan;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +65,34 @@ class PemakaianWidget extends BaseWidget
                     ->description('Tagihan belum dibayar')
                     ->color('danger')
                     ->icon('heroicon-o-x-circle'),
+            ];
+        }
+
+        // === Jika Petugas (role_id = 2) ===
+        if ($user->role_id === 2) {
+            $totalPelanggan = Pelanggan::count();
+
+            $sudahDicatat = Pemakaian::where('periode_id', $periodeAktif->id)
+                ->distinct('pelanggan_id')
+                ->count('pelanggan_id');
+
+            $belumDicatat = $totalPelanggan - $sudahDicatat;
+
+            return [
+                Card::make('Total Pelanggan Aktif', $totalPelanggan)
+                    ->description('Semua pelanggan terdaftar')
+                    ->color('primary')
+                    ->icon('heroicon-o-users'),
+
+                Card::make('Sudah Dicatat', $sudahDicatat)
+                    ->description('Pemakaian periode ' . $periodeAktif->nama_periode)
+                    ->color('success')
+                    ->icon('heroicon-o-document-check'),
+
+                Card::make('Belum Dicatat', $belumDicatat)
+                    ->description('Perlu dicatat di periode aktif')
+                    ->color('warning')
+                    ->icon('heroicon-o-document-minus'),
             ];
         }
 

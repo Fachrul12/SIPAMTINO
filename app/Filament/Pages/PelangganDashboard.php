@@ -4,6 +4,10 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\WidgetResource\Widgets\PelangganStatsWidget;
+use App\Filament\Resources\WidgetResource\Widgets\PemakaianAirChart;
+use App\Filament\Resources\WidgetResource\Widgets\PengaduanTerbaru;
+use App\Filament\Resources\WidgetResource\Widgets\TurbidityChart;
 
 class PelangganDashboard extends Page
 {
@@ -17,4 +21,21 @@ class PelangganDashboard extends Page
     {
         return Auth::user()?->role_id === 3;
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            PelangganStatsWidget::class,
+        ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [                
+            TurbidityChart::class,      
+            PemakaianAirChart::class,
+            PengaduanTerbaru::class,             
+        ];
+    }
+
 }
