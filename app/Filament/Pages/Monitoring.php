@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use App\Filament\Resources\WidgetResource\Widgets\TurbidityChart;
+use App\Filament\Resources\WidgetResource\Widgets\TurbiditySummaryChart;
 use App\Filament\Resources\WidgetResource\Widgets\MonitoringAirWidget;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +29,7 @@ class Monitoring extends Page
     protected function getHeaderWidgets(): array
     {
         return [
-            MonitoringAirWidget::class,
+            MonitoringAirWidget::class,           
         ];
     }
 
@@ -36,6 +37,8 @@ class Monitoring extends Page
     {
         return [
             TurbidityChart::class,
+            TurbiditySummaryChart::class,
+            
         ];
     }
 }

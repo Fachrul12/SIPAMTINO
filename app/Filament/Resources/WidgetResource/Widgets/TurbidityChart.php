@@ -2,35 +2,33 @@
 
 namespace App\Filament\Resources\WidgetResource\Widgets;
 
-use App\Models\Turbidity;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\Redis;
 
 class TurbidityChart extends ChartWidget
 {
-    protected static ?string $heading = 'Grafik Kekeruhan Air (NTU)';
-
-    // Refresh otomatis setiap 5 detik
-    protected static ?string $pollingInterval = '5s';
+    protected static ?string $heading = 'Grafik Kekeruhan Air (Real-time)';
+    protected static ?string $pollingInterval = '2s'; // refresh tiap 2 detik
 
     protected function getData(): array
     {
-        $data = Turbidity::orderBy('recorded_at', 'asc')
-            ->take(20)
-            ->get();
+        // Ambil 20 data terakhir dari Redis buffer
+        $data = Redis::lrange('turbidity:buffer', -20, -1);
+
+        $values = array_map('floatval', $data);
 
         return [
             'datasets' => [
                 [
                     'label' => 'Turbidity (NTU)',
-                    'data' => $data->pluck('turbidity')->toArray(),
+                    'data' => $values,
                     'borderColor' => '#3b82f6',
-                    'fill' => false,
+                    'backgroundColor' => 'rgba(59,130,246,0.2)',
+                    'fill' => true,
                     'tension' => 0.4,
                 ],
             ],
-            'labels' => $data->pluck('recorded_at')
-                ->map(fn($date) => $date->format('H:i:s'))
-                ->toArray(),
+            'labels' => range(1, count($values)), // hanya urutan 1..20
         ];
     }
 

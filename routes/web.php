@@ -7,8 +7,9 @@ use App\Models\Turbidity;
 use App\Filament\Pages\AdminDashboard;
 use App\Filament\Pages\PetugasDashboard;
 use App\Filament\Pages\PelangganDashboard;
-use App\Http\Controllers\TurbidityController;
 use App\Http\Controllers\PendaftaranController;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\DB;
 
 
 Route::get('/', function () {
@@ -16,9 +17,25 @@ Route::get('/', function () {
     return view('landing', compact('latest'));
 })->name('landing');
 
-// API Route for getting latest turbidity data
-Route::get('/api/turbidity/latest', [TurbidityController::class, 'getLatest'])->name('api.turbidity.latest');
-Route::get('/api/turbidity/history', [TurbidityController::class, 'getHistory'])->name('api.turbidity.history');
+Route::get('/api/turbidity/latest', function () {
+    $latest = Redis::get('turbidity:latest');
+
+    return response()->json([
+        'turbidity' => $latest ? floatval($latest) : null,
+        'time' => now()->toDateTimeString(),
+    ]);
+});
+
+Route::get('/api/turbidity/summaries', function () {
+    $summaries = DB::table('turbidity_summaries')
+        ->orderBy('period', 'desc')
+        ->limit(24) // ambil 24 jam terakhir
+        ->get();
+
+    return response()->json($summaries);
+});
+
+
 
 Route::get('w', function () {
     return view('welcome');

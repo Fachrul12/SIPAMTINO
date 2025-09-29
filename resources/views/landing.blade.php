@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIPAMTINO - Sistem Informasi Pengelolaan Air Minum</title>
-    <meta name="description" content="Sistem Informasi Pengelolaan Air Minum Tino - Solusi digital untuk pengelolaan distribusi air bersih yang efisien dan modern">
+    <meta name="description" content="Sistem Informasi Pengelolaan Air Minum Tino - Solusi digital untuk pengelolaan distribusi air bersih yang efisien dan modern">   
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -145,91 +145,58 @@
                             </span>
                         </div>
                         
-                        @if($latest)
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <!-- Nilai Kekeruhan -->
-                                <div class="bg-white/10 rounded-xl p-4">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-blue-200 text-sm">Kekeruhan</span>
-                                        <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M3.5 2a.5.5 0 00-.5.5v15a.5.5 0 001 0V17h12v.5a.5.5 0 001 0v-15a.5.5 0 00-.5-.5h-13zM5 4h10v11H5V4z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                    <div id="turbidity-value" class="text-3xl font-bold text-white">{{ $latest->turbidity }}</div>
-                                    <div class="text-xs text-blue-200 mt-1">NTU</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- Nilai Kekeruhan -->
+                            <div class="bg-white/10 rounded-xl p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-blue-200 text-sm">Kekeruhan</span>
+                                    <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3.5 2a.5.5 0 00-.5.5v15a.5.5 0 001 0V17h12v.5a.5.5 0 001 0v-15a.5.5 0 00-.5-.5h-13zM5 4h10v11H5V4z" clip-rule="evenodd"/>
+                                    </svg>
                                 </div>
-                                
-                                <!-- Status Kualitas -->
-                                <div class="bg-white/10 rounded-xl p-4">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-blue-200 text-sm">Status</span>
-                                        <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                    <div class="text-xl font-bold">
-                                        @if($latest->turbidity <= 5)
-                                            <span id="status-text" class="text-green-400">Sangat Baik</span>
-                                        @elseif($latest->turbidity <= 25)
-                                            <span id="status-text" class="text-yellow-400">Baik</span>
-                                        @elseif($latest->turbidity <= 50)
-                                            <span id="status-text" class="text-orange-400">Sedang</span>
-                                        @else
-                                            <span id="status-text" class="text-red-400">Perlu Perhatian</span>
-                                        @endif
-                                    </div>
-                                    <div id="status-description" class="text-xs text-blue-200 mt-1">
-                                        @if($latest->turbidity <= 5)
-                                            Aman dikonsumsi
-                                        @elseif($latest->turbidity <= 25)
-                                            Layak konsumsi
-                                        @elseif($latest->turbidity <= 50)
-                                            Perlu penyaringan
-                                        @else
-                                            Perlu treatment
-                                        @endif
-                                    </div>
-                                </div>
-                                
-                                <!-- Waktu Update -->
-                                <div class="bg-white/10 rounded-xl p-4">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-blue-200 text-sm">Update</span>
-                                        <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                    <div id="update-time" class="text-lg font-bold text-white">{{ $latest->recorded_at->format('H:i') }}</div>
-                                    <div id="update-date" class="text-xs text-blue-200 mt-1">{{ $latest->recorded_at->format('d M Y') }}</div>
-                                </div>
+                                <div id="turbidity-value" class="text-3xl font-bold text-white">0</div>
+                                <div class="text-xs text-blue-200 mt-1">NTU</div>
                             </div>
                             
-                            <!-- Progress Bar Kualitas Air -->
-                            <div class="mt-4">
-                                <div class="flex justify-between text-xs text-blue-200 mb-2">
-                                    <span>Kualitas Air</span>
-                                    <span id="quality-percentage">{{ min(100, max(0, 100 - ($latest->turbidity * 2))) }}%</span>
+                            <!-- Status Kualitas -->
+                            <div class="bg-white/10 rounded-xl p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-blue-200 text-sm">Status</span>
+                                    <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
                                 </div>
-                                <div class="w-full bg-white/20 rounded-full h-2 overflow-hidden">
-                                    <div id="quality-progress" class="h-full rounded-full transition-all duration-1000 
-                                        @if($latest->turbidity <= 5) bg-gradient-to-r from-green-400 to-emerald-400
-                                        @elseif($latest->turbidity <= 25) bg-gradient-to-r from-yellow-400 to-amber-400
-                                        @elseif($latest->turbidity <= 50) bg-gradient-to-r from-orange-400 to-orange-500
-                                        @else bg-gradient-to-r from-red-400 to-red-500
-                                        @endif"
-                                        style="width: {{ min(100, max(0, 100 - ($latest->turbidity * 2))) }}%">
-                                    </div>
+                                <div id="status-text" class="text-xl font-bold text-gray-400">Menunggu Data...</div>
+                                <div id="status-description" class="text-xs text-blue-200 mt-1">Menunggu data dari sensor...</div>
+                            </div>
+                            
+                            <!-- Waktu Update -->
+                            <div class="bg-white/10 rounded-xl p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-blue-200 text-sm">Update</span>
+                                    <svg class="w-4 h-4 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div id="update-time" class="text-lg font-bold text-white">--:--</div>
+                                <div id="update-date" class="text-xs text-blue-200 mt-1">-- -- ----</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Bar Kualitas Air -->
+                        <div class="mt-4">
+                            <div class="flex justify-between text-xs text-blue-200 mb-2">
+                                <span>Kualitas Air</span>
+                                <span id="quality-percentage">0%</span>
+                            </div>
+                            <div class="w-full bg-white/20 rounded-full h-2 overflow-hidden">
+                                <div id="quality-progress" 
+                                     class="h-full rounded-full bg-gradient-to-r from-gray-400 to-gray-500"
+                                     style="width: 0%">
                                 </div>
                             </div>
-                        @else
-                            <div class="text-center py-8">
-                                <svg class="w-16 h-16 text-blue-300/50 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                </svg>
-                                <p class="text-blue-200">Sistem monitoring sedang melakukan kalibrasi</p>
-                                <p class="text-blue-300/60 text-sm mt-2">Data akan tersedia dalam beberapa saat</p>
-                            </div>
-                        @endif
+                        </div>                        
+                        
                     </div>
                     
                     <div class="flex flex-col sm:flex-row gap-4 mb-8">
@@ -284,49 +251,17 @@
                                     <!-- Water Tank dengan Animasi -->
                                     <div class="relative h-40 bg-white/10 rounded-xl overflow-hidden">
                                         <!-- Water Level berdasarkan kekeruhan -->
-                                        @if($latest)
-                                            <div id="water-level" class="absolute bottom-0 left-0 right-0 transition-all duration-1000"
-                                                style="height: {{ min(90, max(20, 100 - $latest->turbidity)) }}%;">
-                                                <!-- Dynamic water color based on turbidity -->
-                                                <div class="absolute inset-0"
-                                                    @if($latest->turbidity <= 5)
-                                                        style="background: linear-gradient(to top, rgba(59, 130, 246, 0.9), rgba(147, 197, 253, 0.7));" {{-- Clear blue water --}}
-                                                    @elseif($latest->turbidity <= 15)
-                                                        style="background: linear-gradient(to top, rgba(59, 130, 246, 0.85), rgba(165, 180, 252, 0.65));" {{-- Slightly less clear --}}
-                                                    @elseif($latest->turbidity <= 25)
-                                                        style="background: linear-gradient(to top, rgba(96, 165, 250, 0.8), rgba(186, 230, 253, 0.6));" {{-- Light blue with slight cloudiness --}}
-                                                    @elseif($latest->turbidity <= 35)
-                                                        style="background: linear-gradient(to top, rgba(148, 163, 184, 0.85), rgba(203, 213, 225, 0.65));" {{-- Grayish blue (murky) --}}
-                                                    @elseif($latest->turbidity <= 50)
-                                                        style="background: linear-gradient(to top, rgba(161, 161, 170, 0.9), rgba(212, 212, 216, 0.7));" {{-- Gray murky water --}}
-                                                    @elseif($latest->turbidity <= 75)
-                                                        style="background: linear-gradient(to top, rgba(180, 157, 105, 0.9), rgba(217, 196, 145, 0.75));" {{-- Muddy yellow-brown --}}
-                                                    @else
-                                                        style="background: linear-gradient(to top, rgba(146, 125, 89, 0.95), rgba(181, 159, 122, 0.8));" {{-- Very muddy brown --}}
-                                                    @endif
-                                                >
-                                                    <!-- Bubble Animation (less visible for murky water) -->
-                                                    <div class="absolute inset-0">
-                                                        <div class="bubble" style="left: 20%; animation-delay: 0s; opacity: {{ $latest->turbidity > 50 ? '0.3' : '1' }};"></div>
-                                                        <div class="bubble" style="left: 50%; animation-delay: 1s; opacity: {{ $latest->turbidity > 50 ? '0.3' : '1' }};"></div>
-                                                        <div class="bubble" style="left: 80%; animation-delay: 2s; opacity: {{ $latest->turbidity > 50 ? '0.3' : '1' }};"></div>
-                                                    </div>
-                                                    
-                                                    <!-- Turbidity particles effect for murky water -->
-                                                    @if($latest->turbidity > 25)
-                                                        <div class="absolute inset-0" style="opacity: {{ min(0.6, $latest->turbidity / 100) }}; background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);"></div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="absolute bottom-0 left-0 right-0 h-3/4" style="background: linear-gradient(to top, rgba(59, 130, 246, 0.9), rgba(147, 197, 253, 0.7));">
+                                        <div id="water-level-container" class="absolute bottom-0 left-0 right-0 transition-all duration-1000">
+                                            <div id="water-level" class="absolute inset-0 transition-all duration-1000"
+                                                 style="height: 50%; background: linear-gradient(to top, rgba(59,130,246,0.9), rgba(147,197,253,0.7));">
+                                                <!-- Bubble Animation -->
                                                 <div class="absolute inset-0">
                                                     <div class="bubble" style="left: 20%; animation-delay: 0s;"></div>
                                                     <div class="bubble" style="left: 50%; animation-delay: 1s;"></div>
                                                     <div class="bubble" style="left: 80%; animation-delay: 2s;"></div>
                                                 </div>
                                             </div>
-                                        @endif
+                                        </div>
                                         
                                         <!-- Sensor Icon -->
                                         <div class="absolute top-4 right-4">
@@ -862,7 +797,80 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
+    <script>      
+        window.updateTurbidity = function(turbidity) {
+            console.log("UI Update received:", turbidity);
+            document.getElementById('turbidity-value').innerText = turbidity.toFixed(2);
+
+            const statusText = document.getElementById('status-text');
+            const statusDescription = document.getElementById('status-description');
+            const qualityProgress = document.getElementById('quality-progress');
+            const qualityPercentage = document.getElementById('quality-percentage');
+
+            let status = '';
+            let desc = '';
+            let colorClass = '';
+
+            if (turbidity <= 5) {
+                status = 'Sangat Baik';
+                desc = 'Aman dikonsumsi';
+                colorClass = 'from-green-400 to-emerald-400';
+            } else if (turbidity <= 25) {
+                status = 'Baik';
+                desc = 'Layak konsumsi';
+                colorClass = 'from-yellow-400 to-amber-400';
+            } else if (turbidity <= 50) {
+                status = 'Sedang';
+                desc = 'Perlu penyaringan';
+                colorClass = 'from-orange-400 to-orange-500';
+            } else {
+                status = 'Perlu Perhatian';
+                desc = 'Perlu treatment';
+                colorClass = 'from-red-400 to-red-500';
+            }
+
+            statusText.innerText = status;
+            statusDescription.innerText = desc;
+
+            const percentage = Math.min(100, Math.max(0, 100 - (turbidity * 2)));
+            qualityProgress.style.width = percentage + '%';
+            qualityProgress.className = `h-full rounded-full transition-all duration-1000 bg-gradient-to-r ${colorClass}`;
+            qualityPercentage.innerText = percentage.toFixed(0) + '%';
+        };
+
+        window.updateTurbidityTime = function(date) {
+            document.getElementById('update-time').innerText = date.toLocaleTimeString();
+            document.getElementById('update-date').innerText = date.toLocaleDateString();
+        };
+
+        // ===============================
+        // Fetch data terbaru dari API (Redis)
+        // ===============================
+        async function fetchTurbidity() {
+            try {
+                const res = await fetch('/api/turbidity/latest');
+                const data = await res.json();
+
+                if (data.turbidity !== null) {
+                    console.log("Fetched from API:", data.turbidity);
+
+                    window.updateTurbidity(parseFloat(data.turbidity));
+
+                    // perbaikan: gunakan data.timestamp (bukan data.time)
+                    if (data.time) {
+                        window.updateTurbidityTime(new Date(data.time));
+                    }
+                }
+            } catch (err) {
+                console.error("Fetch error:", err);
+            }
+        }
+
+        fetchTurbidity();              // pertama kali
+        setInterval(fetchTurbidity, 2000);
+
+    
+
         AOS.init({
             duration: 800,
             easing: 'ease-in-out',
@@ -1094,53 +1102,6 @@
             }
         }
         
-        function showUpdateNotification() {
-            // Create notification element if it doesn't exist
-            let notification = document.getElementById('update-notification');
-            if (!notification) {
-                notification = document.createElement('div');
-                notification.id = 'update-notification';
-                notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50 flex items-center';
-                notification.innerHTML = `
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    Data kekeruhan diperbarui!
-                `;
-                document.body.appendChild(notification);
-            }
-            
-            // Show notification
-            setTimeout(() => {
-                notification.classList.remove('translate-x-full');
-                notification.classList.add('translate-x-0');
-            }, 100);
-            
-            // Hide notification after 3 seconds
-            setTimeout(() => {
-                notification.classList.remove('translate-x-0');
-                notification.classList.add('translate-x-full');
-            }, 3000);
-        }
-        
-        // Start auto-update if there's existing data
-        @if($latest)
-        setInterval(updateTurbidityData, updateInterval);
-        
-        // Initial check after 2 seconds
-        setTimeout(updateTurbidityData, 2000);
-        @endif
-        
-        // Visual indicator for live connection
-        let pulseInterval = setInterval(() => {
-            const liveIndicator = document.querySelector('.animate-pulse');
-            if (liveIndicator) {
-                liveIndicator.style.opacity = '1';
-                setTimeout(() => {
-                    liveIndicator.style.opacity = '0.8';
-                }, 500);
-            }
-        }, 2000);
-    </script>
+    </script>   
 </body>
 </html>
