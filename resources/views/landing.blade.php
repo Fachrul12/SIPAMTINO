@@ -867,7 +867,7 @@
         }
 
         fetchTurbidity();              // pertama kali
-        setInterval(fetchTurbidity, 2000);
+        setInterval(fetchTurbidity, 1000);
 
     
 
@@ -946,22 +946,22 @@
             const startTime = Date.now();
             const duration = 1000; // 1 second animation
             
-            function animate() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
                 
-                // Easing function
-                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            // Easing function
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
                 
-                const value = currentValue + (newValue - currentValue) * easeOutQuart;
-                element.textContent = value.toFixed(1);
+            const value = currentValue + (newValue - currentValue) * easeOutQuart;
+            element.textContent = value.toFixed(1);
                 
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    element.textContent = newValue;
-                }
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                element.textContent = newValue;
             }
+        }
             
             animate();
         }
