@@ -77,6 +77,14 @@ class PengaduanResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('No')
+                    ->formatStateUsing(function ($record) {
+                        if (Auth::user()->role_id === 3) {
+                            return \App\Models\Pengaduan::where('user_id', $record->user_id)
+                                ->where('id', '<=', $record->id)
+                                ->count();
+                        }
+                        return $record->id;
+                    })
                     ->sortable()
                     ->searchable(),
 

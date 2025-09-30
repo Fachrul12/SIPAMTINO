@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PengaduanResource\Pages;
 
 use App\Filament\Resources\PengaduanResource;
+use App\Models\Pengaduan;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Actions;
 use Filament\Infolists;
@@ -31,6 +32,14 @@ class ViewPengaduan extends ViewRecord
                             ->schema([
                                 TextEntry::make('id')
                                     ->label('No. Pengaduan')
+                                    ->getStateUsing(function ($record) {
+                                        if (Auth::user()->role_id === 3) {
+                                            return Pengaduan::where('user_id', $record->user_id)
+                                                ->where('id', '<=', $record->id)
+                                                ->count();
+                                        }
+                                        return $record->id;
+                                    })
                                     ->badge()
                                     ->color('primary'),
 
