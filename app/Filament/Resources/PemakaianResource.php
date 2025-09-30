@@ -8,6 +8,9 @@ use App\Models\Pemakaian;
 use App\Models\Periode;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
@@ -249,20 +252,58 @@ class PemakaianResource extends Resource
 
             ]);
     }
+public static function infolist(Infolist $infolist): Infolist
+{
+    return $infolist
+        ->schema([
+            TextEntry::make('pelanggan.user.name')
+                ->label('Nama Pelanggan'),
+            TextEntry::make('periode.nama_periode')
+                ->label('Periode'),
+            TextEntry::make('meter_awal')
+                ->label('Meter Awal'),
+            TextEntry::make('meter_akhir')
+                ->label('Meter Akhir'),
+            TextEntry::make('total_pakai')
+                ->label('Jumlah Pemakaian (m³)')
+                ->getStateUsing(fn ($record) => $record->meter_akhir - $record->meter_awal),
+            TextEntry::make('tagihan')
+                ->label('Tagihan (Rp)')
+                ->getStateUsing(fn ($record) =>
+                    (($record->meter_akhir - $record->meter_awal) * $record->pelanggan->tarif->biaya_per_m3)
+                    + $record->pelanggan->tarif->beban
+                )
+                ->money('IDR'),
+            TextEntry::make('pembayaran.status')
+                ->label('Status Pembayaran')
+                ->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    'belum_bayar' => 'danger',
+                    'lunas' => 'success',
+                    default => 'gray',
+                })
+                ->formatStateUsing(fn (string $state): string => match ($state) {
+                    'belum_bayar' => 'Belum Lunas',
+                    'lunas' => 'Lunas',
+                    default => $state,
+                }),
+        ]);
+}
 
-    public static function getRelations(): array
-    {
-        return [];
-    }
+public static function getRelations(): array
+{
+    return [];
+}
+public static function getPages(): array
+{
+    return [
+        'index'  => Pages\ListPemakaians::route('/'),
+        'create' => Pages\CreatePemakaian::route('/create'),
+        'edit'   => Pages\EditPemakaian::route('/{record}/edit'),
+    ];
+}
 
-    public static function getPages(): array
-    {
-        return [
-            'index'  => Pages\ListPemakaians::route('/'),
-            'create' => Pages\CreatePemakaian::route('/create'),
-            'edit'   => Pages\EditPemakaian::route('/{record}/edit'),
-        ];
-    }
+
 
     
 }

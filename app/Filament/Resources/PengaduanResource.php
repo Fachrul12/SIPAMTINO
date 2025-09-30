@@ -6,11 +6,13 @@ use App\Filament\Resources\PengaduanResource\Pages;
 use App\Models\Pengaduan;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Builder; 
+use Illuminate\Database\Eloquent\Builder;
 
 class PengaduanResource extends Resource
 {
@@ -29,35 +31,43 @@ class PengaduanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('jenis_pengaduan')
-                    ->label('Jenis Pengaduan')
-                    ->options([
-                        'Pipa Bocor' => 'Pipa Bocor',
-                        'Meteran Rusak' => 'Meteran Rusak',
-                        'Meteran Bocor' => 'Meteran Bocor',
-                        'Air Keruh' => 'Air Keruh',
+                Section::make('Buat Pengaduan')
+                    ->schema([
+                        Forms\Components\Select::make('jenis_pengaduan')
+                            ->label('Jenis Pengaduan')
+                            ->options([
+                                'Pipa Bocor' => 'Pipa Bocor',
+                                'Meteran Rusak' => 'Meteran Rusak',
+                                'Meteran Bocor' => 'Meteran Bocor',
+                                'Air Keruh' => 'Air Keruh',
+                            ])
+                            ->required()
+                            ->columnSpan(12),
+
+                        Forms\Components\Textarea::make('deskripsi')
+                            ->label('Deskripsi')
+                            ->rows(4)
+                            ->placeholder('Jelaskan masalah yang Anda alami secara detail...')
+                            ->columnSpan(12),
+
+                        Forms\Components\FileUpload::make('foto')
+                            ->label('Foto')
+                            ->image()
+                            ->directory('pengaduan-foto')
+                            ->visibility('public')
+                            ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])
+                            ->maxSize(2048) // 2MB dalam kilobytes
+                            ->imagePreviewHeight('250')
+                            ->loadingIndicatorPosition('left')
+                            ->panelAspectRatio('2:1')
+                            ->panelLayout('integrated')
+                            ->removeUploadedFileButtonPosition('right')
+                            ->uploadButtonPosition('left')
+                            ->uploadProgressIndicatorPosition('left')
+                            ->helperText('Format: JPG, JPEG, PNG, GIF. Maksimal ukuran: 2MB')
+                            ->columnSpan(12),
                     ])
-                    ->required(),
-
-                Forms\Components\FileUpload::make('foto')
-                    ->label('Foto')
-                    ->image()
-                    ->directory('pengaduan-foto')
-                    ->visibility('public')
-                    ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])
-                    ->maxSize(2048) // 2MB dalam kilobytes
-                    ->imagePreviewHeight('250')
-                    ->loadingIndicatorPosition('left')
-                    ->panelAspectRatio('2:1')
-                    ->panelLayout('integrated')
-                    ->removeUploadedFileButtonPosition('right')
-                    ->uploadButtonPosition('left')
-                    ->uploadProgressIndicatorPosition('left')
-                    ->helperText('Format: JPG, JPEG, PNG, GIF. Maksimal ukuran: 2MB'),
-
-                Forms\Components\Textarea::make('deskripsi')
-                    ->label('Deskripsi')
-                    ->rows(4),
+                    ->columns(1),
             ]);
     }
 

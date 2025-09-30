@@ -16,4 +16,15 @@ class EditPelanggan extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $record = $this->record;
+        if ($record && $record->user) {
+            $data['name'] = $record->user->name;
+            $data['email'] = $record->user->email;
+            $data['no_hp'] = $record->no_hp ?: $record->user->no_hp;
+        }
+        return $data;
+    }
 }

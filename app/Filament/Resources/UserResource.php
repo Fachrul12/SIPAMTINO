@@ -78,7 +78,8 @@ class UserResource extends Resource
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn (User $record): bool => $record->id !== Auth::id()),
             ]);
     }
 

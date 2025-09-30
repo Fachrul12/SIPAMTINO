@@ -126,16 +126,37 @@ class PelangganResource extends Resource
 
     public static function mutateFormDataBeforeSave(array $data): array
 {
-    if (!empty($data['password'])) {
-        $pelanggan = Pelanggan::find($data['id'] ?? null);
+    if (isset($data['id'])) {
+        $pelanggan = Pelanggan::find($data['id']);
         if ($pelanggan && $pelanggan->user) {
-            $pelanggan->user->update([
-                'password' => bcrypt($data['password']),
-            ]);
+            $userData = [
+                'name' => $data['name'] ?? $pelanggan->user->name,
+                'email' => $data['email'] ?? $pelanggan->user->email,
+            ];
+
+            if (isset($data['no_hp'])) {
+                $userData['no_hp'] = $data['no_hp'];
+                $pelanggan->no_hp = $data['no_hp'];
+            }
+
+            if (!empty($data['password'])) {
+                $userData['password'] = bcrypt($data['password']);
+            }
+
+            $pelanggan->user->update($userData);
+
+            $pelanggan->tarif_id = $data['tarif_id'];
+            $pelanggan->save();
         }
     }
-    unset($data['password']); // jangan simpan ke tabel pelanggan
-    return $data;
+
+    // Return only Pelanggan fields for saving to Pelanggan table
+    $pelangganData = [
+        'no_hp' => $data['no_hp'] ?? null,
+        'tarif_id' => $data['tarif_id'],
+    ];
+    unset($data['name'], $data['email'], $data['password']); // Remove non-Pelanggan fields
+    return array_merge($data, $pelangganData); // But since id and others may be there, merge to keep
 }
 
 }
