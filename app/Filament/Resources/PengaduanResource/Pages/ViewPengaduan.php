@@ -10,7 +10,9 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Filament\Notifications\Notification;
 
 class ViewPengaduan extends ViewRecord
@@ -58,14 +60,9 @@ class ViewPengaduan extends ViewRecord
 
                         Section::make('Lampiran Foto')
                             ->schema([
-                                ImageEntry::make('foto')
-                                    ->label('')
-                                    ->disk('public')
-                                    ->visibility('public')
-                                    ->size(500) // lebar max
-                                    ->extraAttributes([
-                                        'style' => 'border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-top:12px; max-width:100%; height:auto;'
-                                    ])
+                                View::make('foto')
+                                    ->label('Foto Lampiran')
+                                    ->view('filament.infolists.components.pengaduan-foto')
                                     ->getStateUsing(fn ($record) => $record->foto),
                             ])
                             ->collapsible()
