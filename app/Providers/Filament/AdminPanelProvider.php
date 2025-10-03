@@ -26,6 +26,7 @@ use Filament\Pages\Auth\Login;
 use App\Filament\Pages\Auth\CustomLogin;
 use Filament\Support\Facades\FilamentView;
 
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -34,6 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('')
+            ->spa()
             ->login(CustomLogin::class)
             ->colors([
                 'primary' => Color::Blue,

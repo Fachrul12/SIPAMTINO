@@ -96,7 +96,7 @@
                     <a href="{{ route('pendaftaran.form') }}" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200">
                         Daftar Akun
                     </a>
-                    <a href="/login" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-medium">
+                    <a href="/login" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 sm:px-6 py-2 rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-medium">
                         Masuk Sistem
                     </a>
                 </div>
@@ -120,19 +120,19 @@
                 
                 <!-- Left Content -->
                 <div class="text-white" data-aos="fade-right" data-aos-duration="1000">
-                    <h1 class="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-relaxed">
                         Sistem Informasi
                         <span class="bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
                             Pengelolaan Air Minum
                         </span>
                     </h1>
-                    <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+                    <p class="text-base sm:text-xl text-blue-100 mb-8 leading-relaxed">
                         SIPAMTINO adalah solusi digital terdepan untuk pengelolaan distribusi air bersih. 
                         Dilengkapi monitoring kekeruhan air real-time, pembayaran mudah, dan layanan pelanggan yang responsif.
                     </p>
                     
                     <!-- Live Monitoring Kekeruhan Air -->
-                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-8 border border-white/20" data-aos="fade-up" data-aos-delay="300">
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border border-white/20" data-aos="fade-up" data-aos-delay="300">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-cyan-200 flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -154,7 +154,7 @@
                                         <path fill-rule="evenodd" d="M3.5 2a.5.5 0 00-.5.5v15a.5.5 0 001 0V17h12v.5a.5.5 0 001 0v-15a.5.5 0 00-.5-.5h-13zM5 4h10v11H5V4z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
-                                <div id="turbidity-value" class="text-3xl font-bold text-white">0</div>
+                                <div id="turbidity-value" class="text-2xl sm:text-3xl font-bold text-white">0</div>
                                 <div class="text-xs text-blue-200 mt-1">NTU</div>
                             </div>
                             
@@ -166,7 +166,7 @@
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
-                                <div id="status-text" class="text-xl font-bold text-gray-400">Menunggu Data...</div>
+                                <div id="status-text" class="text-lg sm:text-xl font-bold text-gray-400">Menunggu Data...</div>
                                 <div id="status-description" class="text-xs text-blue-200 mt-1">Menunggu data dari sensor...</div>
                             </div>
                             
@@ -178,7 +178,7 @@
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
-                                <div id="update-time" class="text-lg font-bold text-white">--:--</div>
+                                <div id="update-time" class="text-base sm:text-lg font-bold text-white">--:--</div>
                                 <div id="update-date" class="text-xs text-blue-200 mt-1">-- -- ----</div>
                             </div>
                         </div>
@@ -200,16 +200,16 @@
                     </div>
                     
                     <div class="flex flex-col sm:flex-row gap-4 mb-8">
-                        <a href="/login" class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 text-center">
+                        <a href="/login" class="bg-white text-purple-600 px-4 sm:px-8 py-3 sm:py-4 rounded-full font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 text-center">
                             Mulai Sekarang
                         </a>
-                        <a href="#fitur" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300 text-center">
+                        <a href="#fitur" class="border-2 border-white text-white px-4 sm:px-8 py-3 sm:py-4 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300 text-center">
                             Pelajari Lebih Lanjut
                         </a>
                     </div>
                     
                     <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-8 pt-8 border-t border-blue-400/30">
+                    <div class="grid grid-cols-3 gap-4 sm:gap-8 pt-8 border-t border-blue-400/30">
                         <div class="text-center">
                             <div class="text-3xl font-bold text-cyan-300">{{ \App\Models\Pelanggan::count() }}</div>
                             <div class="text-blue-200 text-sm">Pelanggan Aktif</div>
@@ -230,7 +230,7 @@
                     <div class="relative z-10 float-animation">
                         <div class="w-full max-w-lg mx-auto">
                             <!-- Main Dashboard Card -->
-                            <div class="relative bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
+                            <div class="relative bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-8 border border-white/20">
                                 <!-- Dashboard Header -->
                                 <div class="flex items-center justify-between mb-6">
                                     <h3 class="text-white font-semibold">Dashboard Monitoring</h3>
@@ -249,7 +249,7 @@
                                     </div>
                                     
                                     <!-- Water Tank dengan Animasi -->
-                                    <div class="relative h-40 bg-white/10 rounded-xl overflow-hidden">
+                                    <div class="relative h-32 sm:h-40 bg-white/10 rounded-xl overflow-hidden">
                                         <!-- Water Level berdasarkan kekeruhan -->
                                         <div id="water-level-container" class="absolute bottom-0 left-0 right-0 transition-all duration-1000">
                                             <div id="water-level" class="absolute inset-0 transition-all duration-1000"
@@ -678,7 +678,7 @@
                 </div>
                 
                 <!-- Contact Form -->
-                <div class="bg-white rounded-3xl shadow-2xl p-8" data-aos="fade-left" data-aos-duration="1000">
+                {{-- <div class="bg-white rounded-3xl shadow-2xl p-8" data-aos="fade-left" data-aos-duration="1000">
                     <h3 class="text-2xl font-bold text-gray-900 mb-6">Kirim Pesan</h3>
                     <form class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -706,7 +706,7 @@
                             Kirim Pesan
                         </button>
                     </form>
-                </div>
+                </div> --}}
                 
             </div>
         </div>
@@ -892,7 +892,7 @@
         });
         
         // Real-time update untuk monitoring kekeruhan air
-        let lastTimestamp = {{ $latest ? $latest->recorded_at->timestamp : 0 }};
+        let lastTimestamp = {{ $latestData['timestamp'] }};
         let updateInterval = 5000; // Update setiap 5 detik
         let isUpdating = false;
         

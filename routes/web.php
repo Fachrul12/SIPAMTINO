@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\User;
-use App\Models\Turbidity;
 use App\Filament\Pages\AdminDashboard;
 use App\Filament\Pages\PetugasDashboard;
 use App\Filament\Pages\PelangganDashboard;
@@ -13,9 +12,17 @@ use Illuminate\Support\Facades\DB;
 
 
 Route::get('/', function () {
-    $latest = Turbidity::latest('recorded_at')->first();
-    return view('landing', compact('latest'));
+    $latest = Redis::get('turbidity:latest');
+
+    $latestData = [
+        'turbidity' => $latest ? floatval($latest) : null,
+        'time' => now()->toDateTimeString(),
+        'timestamp' => now()->timestamp, // tambahkan ini
+    ];
+
+    return view('landing', compact('latestData'));
 })->name('landing');
+
 
 Route::get('/api/turbidity/latest', function () {
     $latest = Redis::get('turbidity:latest');
