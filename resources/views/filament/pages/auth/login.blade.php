@@ -1,65 +1,18 @@
 <x-filament-panels::page.simple>
     <!-- Modern split-screen design -->
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-800 lg:grid lg:grid-cols-2">
-        
-        <!-- Left side - Brand/Visual Section -->
-        {{-- <div class="hidden lg:flex lg:flex-col lg:justify-center lg:items-center bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-700 relative overflow-hidden">
-            <!-- Animated background shapes -->
-            <div class="absolute inset-0">
-                <div class="absolute top-20 left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-                <div class="absolute bottom-32 right-16 w-48 h-48 bg-purple-300/20 rounded-full blur-2xl animate-bounce"></div>
-                <div class="absolute top-1/2 left-1/4 w-32 h-32 bg-violet-400/30 rounded-full blur-xl animate-ping"></div>
-            </div>
-            
-            <div class="relative z-10 text-center text-white max-w-md px-8">
-                <!-- Large logo with glow -->
-                <div class="mb-12">
-                    <div class="relative inline-block">
-                        <div class="absolute inset-0 bg-white/20 rounded-3xl blur-2xl scale-110"></div>
-                        <div class="relative bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/20">
-                            <img src="{{ asset('logo.png') }}" alt="SIPAMTINO" class="h-24 w-24 mx-auto object-contain">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Brand messaging -->
-                <h1 class="text-5xl font-black mb-6 leading-tight">
-                    SIPAMTINO
-                </h1>
-                <p class="text-xl font-dark mb-8 text-white/90">
-                    Sistem Informasi Pengelolaan
-                    <span class="font-semibold">Air Minum Terpadu</span>
-                </p>
-                
-                <!-- Features highlight -->
-                <div class="space-y-4 text-left">
-                    <div class="flex items-center text-white/80">
-                        <div class="w-2 h-2 bg-white rounded-full mr-4"></div>
-                        <span class="text-sm font-medium">Kelola pelanggan dengan mudah</span>
-                    </div>
-                    <div class="flex items-center text-white/80">
-                        <div class="w-2 h-2 bg-white rounded-full mr-4"></div>
-                        <span class="text-sm font-medium">Monitoring penggunaan real-time</span>
-                    </div>
-                    <div class="flex items-center text-white/80">
-                        <div class="w-2 h-2 bg-white rounded-full mr-4"></div>
-                        <span class="text-sm font-medium">Laporan otomatis dan akurat</span>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+    <div class="bg-gray-50 dark:bg-gray-800 lg:grid lg:grid-cols-2">       
         
         <!-- Right side - Login Form -->
-        <div class="flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
+        <div class="flex flex-col justify-center py-6 px-4 sm:px-6 lg:px-20 xl:px-24">
             <div class="mx-auto w-full max-w-sm lg:max-w-md">
-                
+{{--                 
                 <!-- Mobile logo (hidden on desktop) -->
                 <div class="lg:hidden text-center mb-8">
                     <div class="inline-block p-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-lg">
                         <img src="{{ asset('logo.png') }}" alt="Logo" class="h-12 w-12 object-contain">
                     </div>
                 </div>
-                
+                 --}}
                 <!-- Welcome section -->
                 <div class="mb-10 ">
                     <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -111,39 +64,10 @@
                         </div>
                     </div>
                 </form>
-                
-                <!-- User roles info -->
-                <div class="mt-12 p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4 text-center">
-                        🎯 Jenis Akun
-                    </h3>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex items-center justify-between py-2">
-                            <div class="flex items-center">
-                                <span class="text-purple-600 mr-3">👑</span>
-                                <span class="font-medium text-gray-900 dark:text-gray-100">Admin</span>
-                            </div>
-                            <span class="text-gray-500 dark:text-gray-400 text-xs">Full access</span>
-                        </div>
-                        <div class="flex items-center justify-between py-2">
-                            <div class="flex items-center">
-                                <span class="text-indigo-600 mr-3">🛠️</span>
-                                <span class="font-medium text-gray-900 dark:text-gray-100">Petugas</span>
-                            </div>
-                            <span class="text-gray-500 dark:text-gray-400 text-xs">Manage customers</span>
-                        </div>
-                        <div class="flex items-center justify-between py-2">
-                            <div class="flex items-center">
-                                <span class="text-violet-600 mr-3">👤</span>
-                                <span class="font-medium text-gray-900 dark:text-gray-100">Pelanggan</span>
-                            </div>
-                            <span class="text-gray-500 dark:text-gray-400 text-xs">View bills</span>
-                        </div>
-                    </div>
-                </div>
+                               
                 
                 <!-- Back link -->
-                <div class="mt-8 text-center">
+                <div class="mt-8 text-center" style="margin-top: 15px" >
                     <a href="{{ route('landing') }}" class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors group">
                         <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
@@ -152,12 +76,12 @@
                     </a>
                 </div>
                 
-                <!-- Footer info -->
+                {{-- <!-- Footer info -->
                 <div class="mt-8 text-center">
                     <p class="text-xs text-gray-500 dark:text-gray-400">
                         © 2024 SIPAMTINO • v1.0 • Made with ❤️
                     </p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

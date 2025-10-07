@@ -303,6 +303,20 @@ public static function getPages(): array
     ];
 }
 
+public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+{
+    $query = parent::getEloquentQuery();
+
+    // Jika user adalah pelanggan, hanya tampilkan data miliknya
+    if (Auth::user()->role_id === 3) {
+        $query->whereHas('pelanggan', function ($q) {
+            $q->where('user_id', Auth::id());
+        });
+    }
+
+    return $query;
+}
+
 
 
     
