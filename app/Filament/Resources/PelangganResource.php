@@ -18,6 +18,7 @@ use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PelangganResource extends Resource
 {
@@ -45,11 +46,10 @@ class PelangganResource extends Resource
             ->email()
             ->required()
             ->dehydrated(true)
-            ->unique(
-                table: 'users',
-                column: 'email',
-                ignoreRecord: true
-            ),
+            ->rule(function ($record) {        
+                $userId = $record?->user_id ?? null;        
+                return Rule::unique('users', 'email')->ignore($userId);
+    }),
 
             Forms\Components\TextInput::make('no_hp')
                 ->label('Nomor HP')

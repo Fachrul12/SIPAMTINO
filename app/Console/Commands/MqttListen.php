@@ -45,6 +45,8 @@ class MqttListen extends Command
                 $this->info("📩 Message received on [{$topic}]: {$message}");
 
                 try {
+                    $message = trim($message, "\x00..\x1F"); 
+
                     $data = json_decode($message, true);
 
                     if (!isset($data['turbidity'])) {

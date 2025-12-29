@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redis;
 class TurbidityChart extends ChartWidget
 {
     protected static ?string $heading = 'Grafik Kekeruhan Air (Real-time)';
-    protected static ?string $pollingInterval = '2s'; // refresh tiap 2 detik
+    protected static ?string $pollingInterval = '1s'; 
 
     protected function getData(): array
     {

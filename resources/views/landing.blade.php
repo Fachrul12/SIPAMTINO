@@ -167,7 +167,7 @@
                                     </svg>
                                 </div>
                                 <div id="status-text" class="text-lg sm:text-xl font-bold text-gray-400">Menunggu Data...</div>
-                                <div id="status-description" class="text-xs text-blue-200 mt-1">Menunggu data dari sensor...</div>
+                                
                             </div>
                             
                             <!-- Waktu Update -->
@@ -808,26 +808,29 @@
             const qualityPercentage = document.getElementById('quality-percentage');
 
             let status = '';
-            let desc = '';
             let colorClass = '';
 
-            if (turbidity <= 5) {
-                status = 'Sangat Baik';
-                desc = 'Aman dikonsumsi';
+            if (turbidity <= 1) {
+                status = 'Sangat Jernih';
                 colorClass = 'from-green-400 to-emerald-400';
+
+            } else if (turbidity <= 5) {
+                status = 'Jernih';
+                colorClass = 'from-lime-400 to-green-400';
+
             } else if (turbidity <= 25) {
-                status = 'Baik';
-                desc = 'Layak konsumsi';
+                status = 'Agak Keruh';
                 colorClass = 'from-yellow-400 to-amber-400';
-            } else if (turbidity <= 50) {
-                status = 'Sedang';
-                desc = 'Perlu penyaringan';
+
+            } else if (turbidity <= 100) {
+                status = 'Keruh';
                 colorClass = 'from-orange-400 to-orange-500';
+
             } else {
-                status = 'Perlu Perhatian';
-                desc = 'Perlu treatment';
+                status = 'Sangat Keruh';
                 colorClass = 'from-red-400 to-red-500';
             }
+
 
             statusText.innerText = status;
             statusDescription.innerText = desc;

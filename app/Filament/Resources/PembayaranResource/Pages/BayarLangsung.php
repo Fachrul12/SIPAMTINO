@@ -175,11 +175,6 @@ Forms\Components\Section::make('Detail Tagihan')
                     $this->data['jumlah_dibayar'] >= $this->data['jumlah_bayar']
                 ),
 
-            Actions\Action::make('reset')
-                ->label('Reset Form')
-                ->icon('heroicon-o-arrow-path')
-                ->color('gray')
-                ->action(fn () => $this->form->fill()),
         ];
     }
 

@@ -31,9 +31,6 @@ class PemakaianResource extends Resource
     protected static ?string $navigationGroup = 'Laporan';
     protected static ?string $navigationLabel = 'Pemakaian';
 
-    /** =======================
-     *  AUTHORIZATION
-     *  ======================= */
     // public static function canViewAny(): bool
     // {
     //     return Auth::user()->role_id !== 3; // pelanggan tidak bisa akses
@@ -44,9 +41,11 @@ class PemakaianResource extends Resource
     //     return Auth::user()->role_id !== 3;
     // }
 
+    //1 :  Admin, 2 : Petugas, 3 : Pelanggan.
+    
     public static function canCreate(): bool
     {
-        return Auth::user()->role_id === 2; // hanya petugas
+        return Auth::user()->role_id === 2;
     }
 
     public static function canEdit($record): bool
@@ -111,15 +110,21 @@ class PemakaianResource extends Resource
                                     Pelanggan::with('user')
                                         ->whereHas('user', fn ($q) => $q->where('role_id', 3))
                                         ->get()
-                                        ->pluck('user.name', 'id')
+                                        ->pluck('user.name', 'id')                                        
                                 )
+                                ->disabled(fn ($livewire) => $livewire instanceof \App\Filament\Resources\PemakaianResource\Pages\EditPemakaian)
                                 ->searchable()
                                 ->required()
                                 ->reactive()
-                                ->rules([
-                                    Rule::unique('pemakaians', 'pelanggan_id')
-                                        ->where(fn ($query) => $query->where('periode_id', Periode::where('status', 'aktif')->value('id')))
-                                ])
+                                ->rules(function (callable $get, $livewire) {
+                                    $periodeAktifId = \App\Models\Periode::where('status', 'aktif')->value('id');
+
+                                    return [
+                                        Rule::unique('pemakaians', 'pelanggan_id')
+                                            ->where(fn ($query) => $query->where('periode_id', $periodeAktifId))
+                                            ->ignore($livewire->record?->id),
+                                    ];
+                                })
                                 
                                 ->validationMessages([
                                     'unique' => 'Pelanggan untuk periode yang dipilih sudah dibuat.',
@@ -248,7 +253,11 @@ class PemakaianResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn ($record) =>
+            optional($record->pembayaran)->status !== 'lunas'
+        ),
+
 
             ]);
     }
@@ -316,6 +325,7 @@ public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
 
     return $query;
 }
+
 
 
 

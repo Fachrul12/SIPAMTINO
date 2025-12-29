@@ -22,11 +22,37 @@ class MonitoringAirWidget extends BaseWidget
 
         // Tentukan label kondisi berdasarkan nilai NTU
         $kondisi = match (true) {
-            $nilaiSekarang <= 5  => ['label' => 'Sangat Jernih – Aman dikonsumsi', 'color' => 'success', 'icon' => 'heroicon-o-sparkles'],
-            $nilaiSekarang <= 25 => ['label' => 'Jernih – Layak konsumsi', 'color' => 'info', 'icon' => 'heroicon-o-adjustments-horizontal'],
-            $nilaiSekarang <= 50 => ['label' => 'Kurang Jernih – Perlu penyaringan', 'color' => 'warning', 'icon' => 'heroicon-o-exclamation-triangle'],
-            default              => ['label' => 'Keruh – Perlu perhatian', 'color' => 'danger', 'icon' => 'heroicon-o-fire'],
-        };
+        $nilaiSekarang <= 1  => [
+            'label' => 'Sangat Jernih – Aman dikonsumsi',
+            'color' => 'success',
+            'icon'  => 'heroicon-o-sparkles'
+        ],
+
+        $nilaiSekarang <= 5  => [
+            'label' => 'Jernih – Layak konsumsi',
+            'color' => 'info',
+            'icon'  => 'heroicon-o-adjustments-horizontal'
+        ],
+
+        $nilaiSekarang <= 25 => [
+            'label' => 'Agak Keruh – Perlu penyaringan',
+            'color' => 'warning',
+            'icon'  => 'heroicon-o-exclamation-triangle'
+        ],
+
+        $nilaiSekarang <= 100 => [
+            'label' => 'Keruh – Perlu perhatian',
+            'color' => 'danger',
+            'icon'  => 'heroicon-o-fire'
+        ],
+
+        default => [
+            'label' => 'Sangat Keruh – Tidak layak digunakan',
+            'color' => 'danger',
+            'icon'  => 'heroicon-o-x-circle'
+        ],
+    };
+
 
         return [
             // Card 1 - Kekeruhan sekarang (Redis)

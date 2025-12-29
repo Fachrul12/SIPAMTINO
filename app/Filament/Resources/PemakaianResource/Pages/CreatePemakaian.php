@@ -61,4 +61,9 @@ protected function mutateFormDataBeforeSave(array $data): array
     return $this->mutateFormDataBeforeCreate($data);
 }
 
+protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
 }

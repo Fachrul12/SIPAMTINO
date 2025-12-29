@@ -153,46 +153,36 @@ class CalonPelangganResource extends Resource
                     ->label('Setujui')
                     ->icon('heroicon-o-check')
                     ->color('success')
-                    ->form([
-                        Textarea::make('keterangan')
-                            ->label('Keterangan (opsional)')
-                            ->rows(3),
-                    ])
-                    ->action(function (CalonPelanggan $record, array $data): void {
-                        $record->approve(Auth::id(), $data['keterangan'] ?? null);
-                        
+                    ->requiresConfirmation()
+                    ->action(function (CalonPelanggan $record): void {
+                        $record->approve(Auth::id(), null);
+
                         Notification::make()
                             ->title('Berhasil!')
                             ->body('Calon pelanggan berhasil disetujui dan akun telah dibuat.')
                             ->success()
                             ->send();
                     })
-                    ->visible(fn (CalonPelanggan $record): bool => $record->status === 'pending')
-                    ->requiresConfirmation(),
-                    
+                    ->visible(fn (CalonPelanggan $record): bool => $record->status === 'pending'),
+
                 Action::make('reject')
                     ->label('Tolak')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->form([
-                        Textarea::make('keterangan')
-                            ->label('Alasan Penolakan')
-                            ->required()
-                            ->rows(3),
-                    ])
-                    ->action(function (CalonPelanggan $record, array $data): void {
-                        $record->reject(Auth::id(), $data['keterangan']);
-                        
+                    ->requiresConfirmation()
+                    ->action(function (CalonPelanggan $record): void {
+                        $record->reject(Auth::id(), null);
+
                         Notification::make()
                             ->title('Berhasil!')
                             ->body('Calon pelanggan berhasil ditolak.')
                             ->success()
                             ->send();
                     })
-                    ->visible(fn (CalonPelanggan $record): bool => $record->status === 'pending')
-                    ->requiresConfirmation(),
+                    ->visible(fn (CalonPelanggan $record): bool => $record->status === 'pending'),
+
                     
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make()
                     ->visible(fn (CalonPelanggan $record): bool => $record->status !== 'pending'),
             ])

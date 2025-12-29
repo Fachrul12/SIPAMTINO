@@ -8,30 +8,29 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditPemakaian extends EditRecord
 {
-    protected static string $resource = PemakaianResource::class;
+    protected static string $resource = PemakaianResource::class;    
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
 
-    protected function mutateFormDataBeforeCreate(array $data): array
+    protected function mutateFormDataBeforeSave(array $data): array
 {
-    // ambil meter_awal dari periode sebelumnya
-    $lastPemakaian = \App\Models\Pemakaian::where('pelanggan_id', $data['pelanggan_id'])
-        ->where('periode_id', '<', $data['periode_id'])
+    // Gunakan data dari record jika field tidak dikirim dari form
+    $pelangganId = $data['pelanggan_id'] ?? $this->record->pelanggan_id;
+    $periodeId   = $data['periode_id'] ?? $this->record->periode_id;
+
+    // Ambil meter_awal dari periode sebelumnya
+    $lastPemakaian = \App\Models\Pemakaian::where('pelanggan_id', $pelangganId)
+        ->where('periode_id', '<', $periodeId)
         ->latest('id')
         ->first();
 
-    $data['meter_awal'] = $lastPemakaian ? $lastPemakaian->meter_akhir : 0;
+    $meterAwal = $lastPemakaian ? $lastPemakaian->meter_akhir : 0;
+    $data['meter_awal'] = $meterAwal;
 
-    // hitung total_pakai
-    $data['total_pakai'] = max(0, $data['meter_akhir'] - $data['meter_awal']);
+    // Hitung total pemakaian
+    $data['total_pakai'] = max(0, ($data['meter_akhir'] ?? $this->record->meter_akhir) - $meterAwal);
 
-    // hitung tagihan
-    $pelanggan = \App\Models\Pelanggan::with('tarif')->find($data['pelanggan_id']);
+    // Hitung tagihan
+    $pelanggan = \App\Models\Pelanggan::with('tarif')->find($pelangganId);
     if ($pelanggan && $pelanggan->tarif) {
         $data['tagihan'] = ($data['total_pakai'] * $pelanggan->tarif->biaya_per_m3)
                          + $pelanggan->tarif->beban;
@@ -40,9 +39,7 @@ class EditPemakaian extends EditRecord
     return $data;
 }
 
-protected function mutateFormDataBeforeSave(array $data): array
-{
-    return $this->mutateFormDataBeforeCreate($data);
-}
+
+
 
 }

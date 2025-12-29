@@ -61,7 +61,9 @@ class UserResource extends Resource
 
                 Forms\Components\Select::make('role_id')
                     ->label('Role')
-                    ->options(Role::pluck('name', 'id'))
+                    ->relationship('role', 'name', fn ($query) => 
+                        $query->whereIn('name', ['admin', 'petugas'])
+                    )
                     ->required(),
             ]);
     }
