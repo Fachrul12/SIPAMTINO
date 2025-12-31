@@ -74,15 +74,17 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-gray-900">SIPAMTINO</h1>
-                        <p class="text-xs text-gray-600">Air Bersih untuk Semua</p>
-                    </div>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center">
+                    <img 
+                        src="{{ asset('assets/logo.png') }}"                         
+                        class="w-10 h-10 object-contain"
+                    >
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900">SIPAMTINO</h1>
+                    <p class="text-xs text-gray-600">Air Bersih untuk Semua</p>
+                </div>
+
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8">
@@ -722,9 +724,10 @@
                 <div class="md:col-span-2">
                     <div class="flex items-center space-x-3 mb-4">
                         <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                            </svg>
+                            <img 
+                        src="{{ asset('assets/logo.png') }}"                         
+                        class="w-10 h-10 object-contain"
+                    >
                         </div>
                         <div>
                             <h3 class="text-2xl font-bold text-white">SIPAMTINO</h3>

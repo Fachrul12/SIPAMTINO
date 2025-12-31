@@ -16,10 +16,10 @@ class MqttListen extends Command
 
     public function handle()
     {
-        $host = env('AWS_IOT_ENDPOINT', 'a1b2c3d4e5f6-ats.iot.ap-southeast-1.amazonaws.com');
+        $host = env('AWS_IOT_ENDPOINT', 'a1uhfqvc4cvok5-ats.iot.us-east-1.amazonaws.com');
         $port = env('AWS_IOT_PORT', 8883);
-        $clientId = env('AWS_IOT_CLIENT_ID', 'laravel_listener_' . uniqid());
-        $topic = env('AWS_IOT_TOPIC', 'esp8266/kekeruhan');
+        $clientId = env('AWS_IOT_CLIENT_ID', 'laravel_listener_2' . uniqid());
+        $topic = env('AWS_IOT_TOPIC', 'ESP8266/kekeruhan');
 
         $this->info("Connecting to AWS IoT MQTT broker at {$host}:{$port} ...");
 

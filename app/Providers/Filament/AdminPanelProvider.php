@@ -40,8 +40,10 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
+            // ->brandLogo(asset('assets/logo.png'))
+            ->brandLogo(fn () => view('filament.brand.logo'))
             ->brandName('SIPAMTINO')
-            ->favicon(asset('favicon.ico'))
+            ->favicon(asset('assets/logo.png'))
             ->renderHook(
                 'panels::head.end',
                 fn (): string => '<link rel="stylesheet" href="' . asset('css/simple-menu-style.css') . '">'

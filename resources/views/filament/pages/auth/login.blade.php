@@ -14,12 +14,12 @@
                 </div>
                  --}}
                 <!-- Welcome section -->
-                <div class="mb-10 ">
+                <div class="mb-10 text-center">
                     <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                         Selamat datang!
                     </h2>
                     <p class="text-gray-600 dark:text-gray-400 text-lg">
-                        Masuk ke akun SIPAMTINO Anda
+                        Welcome back! Please enter your details
                     </p>
                 </div>
                 
